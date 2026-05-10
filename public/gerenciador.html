@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Gerenciador Cortinas</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #f4f6fb;
+    --surface: #ffffff;
+    --surface-2: #fafbff;
+    --text: #1a1f36;
+    --muted: #6b7390;
+    --border: #e6e9f2;
+    --primary: #4f46e5;
+    --primary-dark: #4338ca;
+    --primary-soft: #eef2ff;
+    --success: #10b981;
+    --success-soft: #d1fae5;
+    --warning: #f59e0b;
+    --warning-soft: #fef3c7;
+    --danger: #ef4444;
+    --danger-soft: #fee2e2;
+    --info: #3b82f6;
+    --info-soft: #dbeafe;
+    --shadow-sm: 0 1px 2px rgba(15,23,42,.06), 0 1px 3px rgba(15,23,42,.04);
+    --shadow-md: 0 4px 12px rgba(15,23,42,.06), 0 2px 4px rgba(15,23,42,.04);
+    --shadow-lg: 0 12px 32px rgba(79,70,229,.12), 0 4px 12px rgba(15,23,42,.06);
+    --radius: 14px;
+    --radius-sm: 10px;
+    --radius-lg: 20px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    background-image:
+      radial-gradient(circle at 0% 0%, rgba(79,70,229,.08), transparent 40%),
+      radial-gradient(circle at 100% 0%, rgba(59,130,246,.06), transparent 40%);
+    color: var(--text);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+
+  /* HEADER */
+  header.app-header {
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #2563eb 100%);
+    color: #fff;
+    padding: 32px 24px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    position: relative;
+    overflow: hidden;
+  }
+  header.app-header::after {
+    content: "";
+    position: absolute;
+    right: -60px; top: -60px;
+    width: 220px; height: 220px;
+    background: radial-gradient(circle, rgba(255,255,255,.15), transparent 70%);
+    border-radius: 50%;
+  }
+  header.app-header .brand { display: flex; align-items: center; gap: 16px; }
+  header.app-header .brand .logo {
+    width: 56px; height: 56px;
+    background: rgba(255,255,255,.18);
+    backdrop-filter: blur(10px);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+    border: 1px solid rgba(255,255,255,.2);
+  }
+  header.app-header h1 { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; }
+  header.app-header p { opacity: .85; font-size: .92rem; margin-top: 2px; }
+  .stats {
+    display: flex; gap: 12px; flex-wrap: wrap; z-index: 1;
+  }
+  .stat-pill {
+    background: rgba(255,255,255,.15);
+    backdrop-filter: blur(10px);
+    padding: 10px 16px;
+    border-radius: 999px;
+    font-size: .85rem;
+    font-weight: 600;
+    border: 1px solid rgba(255,255,255,.2);
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  /* SECTIONS */
+  .section {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    box-shadow: var(--shadow-md);
+    margin-bottom: 24px;
+    border: 1px solid var(--border);
+  }
+  .section-title {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 1.2rem; font-weight: 700; margin-bottom: 20px;
+    color: var(--text);
+  }
+  .section-title i {
+    width: 36px; height: 36px;
+    background: var(--primary-soft); color: var(--primary);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px;
+  }
+
+  /* FORM */
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+  }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field.full { grid-column: 1 / -1; }
+  label {
+    font-size: .82rem; font-weight: 600; color: var(--muted);
+    display: flex; align-items: center; gap: 6px;
+  }
+  label .opt { color: var(--muted); font-weight: 400; font-size: .75rem; opacity: .7; }
+  input, select, textarea {
+    font-family: inherit;
+    font-size: .95rem;
+    color: var(--text);
+    background: var(--surface-2);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 11px 14px;
+    transition: all .2s ease;
+    width: 100%;
+  }
+  input:hover, select:hover, textarea:hover { border-color: #cbd0e0; }
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(79,70,229,.1);
+  }
+  textarea { resize: vertical; min-height: 80px; }
+
+  /* AMBIENTES */
+  .ambientes-wrap {
+    margin-top: 24px;
+    display: grid; gap: 16px;
+  }
+  .ambiente-card {
+    background: linear-gradient(135deg, #fafbff, #f3f4ff);
+    border: 1.5px solid var(--border);
+    border-left: 4px solid var(--primary);
+    border-radius: var(--radius);
+    padding: 20px;
+    animation: slideIn .35s ease;
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: none; }
+  }
+  .ambiente-header {
+    display: flex; align-items: center; gap: 10px;
+    font-weight: 700; color: var(--primary-dark);
+    margin-bottom: 14px;
+    font-size: 1rem;
+  }
+  .ambiente-header .num {
+    background: var(--primary); color: #fff;
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .85rem;
+    box-shadow: 0 4px 10px rgba(79,70,229,.3);
+  }
+  .ambiente-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+  }
+
+  /* BUTTONS */
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 24px; }
+  .btn {
+    border: none; cursor: pointer; font-family: inherit;
+    font-size: .92rem; font-weight: 600;
+    padding: 11px 20px;
+    border-radius: var(--radius-sm);
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: all .2s ease;
+    text-decoration: none;
+  }
+  .btn:active { transform: translateY(1px); }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--primary), #7c3aed);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(79,70,229,.3);
+  }
+  .btn-primary:hover { box-shadow: 0 8px 20px rgba(79,70,229,.4); transform: translateY(-1px); }
+  .btn-ghost {
+    background: var(--surface-2);
+    color: var(--text);
+    border: 1.5px solid var(--border);
+  }
+  .btn-ghost:hover { background: #fff; border-color: #cbd0e0; }
+  .btn-edit {
+    background: var(--info-soft); color: var(--info);
+  }
+  .btn-edit:hover { background: var(--info); color: #fff; }
+  .btn-delete {
+    background: var(--danger-soft); color: var(--danger);
+  }
+  .btn-delete:hover { background: var(--danger); color: #fff; }
+  .btn-sm { padding: 8px 14px; font-size: .85rem; }
+
+  /* CARDS */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 20px;
+  }
+  .pedido-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    box-shadow: var(--shadow-md);
+    transition: all .25s ease;
+    display: flex; flex-direction: column;
+    animation: slideIn .35s ease;
+  }
+  .pedido-card:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-3px);
+    border-color: rgba(79,70,229,.25);
+  }
+  .pedido-head {
+    display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 14px;
+  }
+  .pedido-cliente {
+    font-size: 1.15rem; font-weight: 700; color: var(--text);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .pedido-cliente i { color: var(--primary); }
+  .pedido-numero {
+    background: var(--primary-soft); color: var(--primary-dark);
+    padding: 4px 10px; border-radius: 999px; font-size: .75rem; font-weight: 700;
+  }
+  .pedido-meta {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+    margin-bottom: 14px;
+  }
+  .meta-item {
+    background: var(--surface-2);
+    border-radius: 10px; padding: 10px 12px;
+    border: 1px solid var(--border);
+  }
+  .meta-item .label { font-size: .7rem; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; font-weight: 600; }
+  .meta-item .value { font-size: .9rem; color: var(--text); font-weight: 600; margin-top: 2px; word-break: break-word; }
+  .pedido-endereco {
+    font-size: .85rem; color: var(--muted);
+    display: flex; align-items: flex-start; gap: 6px;
+    margin-bottom: 14px;
+  }
+  .pedido-endereco i { color: var(--primary); margin-top: 3px; }
+  .ambientes-list {
+    display: flex; flex-direction: column; gap: 10px;
+    margin-bottom: 14px;
+  }
+  .ambientes-list h4 {
+    font-size: .8rem; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; font-weight: 700;
+    display: flex; align-items: center; gap: 6px;
+    margin-bottom: 4px;
+  }
+  .amb-item {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--primary);
+    border-radius: 10px;
+    padding: 10px 12px;
+  }
+  .amb-item-top {
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 6px;
+  }
+  .amb-name { font-weight: 700; font-size: .9rem; color: var(--text); }
+  .amb-medidas { font-size: .8rem; color: var(--muted); margin-top: 4px; }
+  .amb-tipo {
+    margin-top: 6px; display: flex; gap: 6px; flex-wrap: wrap;
+  }
+  .badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: .72rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .03em;
+  }
+  .badge-tipo { background: var(--primary-soft); color: var(--primary-dark); }
+  .badge-auto { background: var(--success-soft); color: #047857; }
+  .badge-manual { background: var(--warning-soft); color: #92400e; }
+  .obs {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: .85rem; color: #78350f;
+    margin-bottom: 14px;
+    display: flex; gap: 8px;
+  }
+  .obs i { color: #d97706; margin-top: 2px; }
+  .pedido-actions {
+    display: flex; gap: 8px; margin-top: auto;
+    padding-top: 14px; border-top: 1px solid var(--border);
+  }
+  .pedido-actions .btn { flex: 1; justify-content: center; }
+
+  /* EMPTY */
+  .empty {
+    text-align: center; padding: 60px 20px;
+    color: var(--muted);
+  }
+  .empty i { font-size: 3.5rem; color: var(--primary); opacity: .3; margin-bottom: 16px; }
+  .empty h3 { color: var(--text); font-size: 1.1rem; margin-bottom: 6px; }
+
+  /* TOAST */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px;
+    background: var(--text); color: #fff;
+    padding: 14px 20px; border-radius: 12px;
+    box-shadow: var(--shadow-lg);
+    display: flex; align-items: center; gap: 10px;
+    z-index: 999;
+    animation: toastIn .3s ease;
+  }
+  .toast.success { background: linear-gradient(135deg, #059669, #10b981); }
+  .toast.danger { background: linear-gradient(135deg, #dc2626, #ef4444); }
+  @keyframes toastIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  @media (max-width: 640px) {
+    .container { padding: 14px; }
+    .section { padding: 20px; }
+    header.app-header { padding: 22px 18px; }
+    header.app-header h1 { font-size: 1.3rem; }
+    .pedido-meta { grid-template-columns: 1fr; }
+    .cards-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header class="app-header">
+    <div class="brand">
+      <div class="logo"><i class="fa-solid fa-shop"></i></div>
+      <div>
+        <h1>Gerenciador Cortinas</h1>
+        <p>Sistema profissional de pedidos de cortinas e persianas</p>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat-pill"><i class="fa-solid fa-clipboard-list"></i> <span id="stat-total">0</span> Pedidos</div>
+      <div class="stat-pill"><i class="fa-solid fa-layer-group"></i> <span id="stat-amb">0</span> Ambientes</div>
+    </div>
+  </header>
+
+  <section class="section">
+    <h2 class="section-title">
+      <i class="fa-solid fa-pen-to-square"></i>
+      <span id="form-title">Novo Pedido</span>
+    </h2>
+    <form id="pedido-form" autocomplete="off">
+      <input type="hidden" id="pedido-id" />
+      <div class="form-grid">
+        <div class="field">
+          <label><i class="fa-solid fa-user"></i> Nome do Cliente</label>
+          <input type="text" id="cliente" required placeholder="Ex: Maria Silva" />
+        </div>
+        <div class="field">
+          <label><i class="fa-solid fa-hashtag"></i> Número do Pedido <span class="opt">(opcional)</span></label>
+          <input type="text" id="numeroPedido" placeholder="Ex: #1042" />
+        </div>
+        <div class="field">
+          <label><i class="fa-solid fa-calendar"></i> Data</label>
+          <input type="date" id="data" required />
+        </div>
+        <div class="field">
+          <label><i class="fa-solid fa-dollar-sign"></i> Valor <span class="opt">(opcional)</span></label>
+          <input type="number" id="valor" step="0.01" min="0" placeholder="R$ 0,00" />
+        </div>
+        <div class="field full">
+          <label><i class="fa-solid fa-location-dot"></i> Endereço</label>
+          <input type="text" id="endereco" required placeholder="Rua, número, bairro, cidade" />
+        </div>
+        <div class="field">
+          <label><i class="fa-solid fa-layer-group"></i> Quantidade de Ambientes</label>
+          <input type="number" id="qtdAmbientes" min="1" max="20" value="1" required />
+        </div>
+        <div class="field full">
+          <label><i class="fa-solid fa-comment"></i> Observações</label>
+          <textarea id="observacoes" placeholder="Informações adicionais sobre o pedido..."></textarea>
+        </div>
+      </div>
+
+      <div class="ambientes-wrap" id="ambientes-container"></div>
+
+      <div class="actions">
+        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> <span id="submit-text">Salvar Pedido</span></button>
+        <button type="button" class="btn btn-ghost" id="btn-cancel" style="display:none"><i class="fa-solid fa-xmark"></i> Cancelar</button>
+        <button type="reset" class="btn btn-ghost"><i class="fa-solid fa-rotate"></i> Limpar</button>
+      </div>
+    </form>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">
+      <i class="fa-solid fa-clipboard-list"></i>
+      Pedidos Cadastrados
+    </h2>
+    <div id="cards-container"></div>
+  </section>
+
+</div>
+
+<script>
+class App {
+  constructor() {
+    this.pedidos = [];
+    this.editingId = null;
+    this.tiposCortina = ['Trilho Suíço', 'Caixa Box', 'Persiana', 'Ilhós', 'Tubo Deslizante'];
+    this.controles = ['Manual', 'Automatizada'];
+    this.STORAGE_KEY = 'gerenciador_cortinas_pedidos';
+  }
+
+  init() {
+    this.pedidos = JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '[]');
+    document.getElementById('data').valueAsDate = new Date();
+    this.bindEvents();
+    this.renderAmbientes();
+    this.renderCards();
+  }
+
+  bindEvents() {
+    document.getElementById('qtdAmbientes').addEventListener('input', () => this.renderAmbientes());
+    document.getElementById('pedido-form').addEventListener('submit', e => {
+      e.preventDefault();
+      this.salvarPedido();
+    });
+    document.getElementById('pedido-form').addEventListener('reset', () => {
+      setTimeout(() => {
+        document.getElementById('data').valueAsDate = new Date();
+        document.getElementById('qtdAmbientes').value = 1;
+        this.renderAmbientes();
+      }, 0);
+    });
+    document.getElementById('btn-cancel').addEventListener('click', () => this.cancelarEdicao());
+  }
+
+  renderAmbientes(dados = null) {
+    const qtd = parseInt(document.getElementById('qtdAmbientes').value) || 1;
+    const container = document.getElementById('ambientes-container');
+    container.innerHTML = '';
+    for (let i = 0; i < qtd; i++) {
+      const d = dados && dados[i] ? dados[i] : { nome: '', largura: '', altura: '', tipoCortina: this.tiposCortina[0], controle: 'Manual' };
+      const card = document.createElement('div');
+      card.className = 'ambiente-card';
+      card.innerHTML = `
+        <div class="ambiente-header">
+          <span class="num">${i+1}</span>
+          <i class="fa-solid fa-door-open"></i>
+          <span>Ambiente ${i+1}</span>
+        </div>
+        <div class="ambiente-grid">
+          <div class="field">
+            <label>Nome do ambiente</label>
+            <input type="text" data-amb="nome" data-i="${i}" value="${this.esc(d.nome)}" placeholder="Ex: Sala" required />
+          </div>
+          <div class="field">
+            <label>Largura (m)</label>
+            <input type="number" step="0.01" min="0" data-amb="largura" data-i="${i}" value="${this.esc(d.largura)}" placeholder="2.50" required />
+          </div>
+          <div class="field">
+            <label>Altura (m)</label>
+            <input type="number" step="0.01" min="0" data-amb="altura" data-i="${i}" value="${this.esc(d.altura)}" placeholder="2.20" required />
+          </div>
+          <div class="field">
+            <label>Tipo de cortina</label>
+            <select data-amb="tipoCortina" data-i="${i}">
+              ${this.tiposCortina.map(t => `<option ${t===d.tipoCortina?'selected':''}>${t}</option>`).join('')}
+            </select>
+          </div>
+          <div class="field">
+            <label>Controle</label>
+            <select data-amb="controle" data-i="${i}">
+              ${this.controles.map(c => `<option ${c===d.controle?'selected':''}>${c}</option>`).join('')}
+            </select>
+          </div>
+        </div>`;
+      container.appendChild(card);
+    }
+  }
+
+  coletarAmbientes() {
+    const qtd = parseInt(document.getElementById('qtdAmbientes').value) || 1;
+    const ambientes = [];
+    for (let i = 0; i < qtd; i++) {
+      const get = k => document.querySelector(`[data-amb="${k}"][data-i="${i}"]`).value;
+      ambientes.push({
+        nome: get('nome'),
+        largura: get('largura'),
+        altura: get('altura'),
+        tipoCortina: get('tipoCortina'),
+        controle: get('controle')
+      });
+    }
+    return ambientes;
+  }
+
+  salvarPedido() {
+    const pedido = {
+      id: this.editingId || Date.now().toString(),
+      cliente: document.getElementById('cliente').value.trim(),
+      endereco: document.getElementById('endereco').value.trim(),
+      numeroPedido: document.getElementById('numeroPedido').value.trim(),
+      data: document.getElementById('data').value,
+      valor: document.getElementById('valor').value,
+      observacoes: document.getElementById('observacoes').value.trim(),
+      ambientes: this.coletarAmbientes()
+    };
+
+    if (this.editingId) {
+      const idx = this.pedidos.findIndex(p => p.id === this.editingId);
+      if (idx >= 0) this.pedidos[idx] = pedido;
+      else this.pedidos.unshift(pedido);
+      this.toast('Pedido atualizado com sucesso!', 'success');
+    } else {
+      this.pedidos.unshift(pedido);
+      this.toast('Pedido salvo com sucesso!', 'success');
+    }
+    this.editingId = null;
+    this.persist();
+    this.resetForm();
+    this.renderCards();
+  }
+
+  editar(id) {
+    const p = this.pedidos.find(x => x.id === id);
+    if (!p) return;
+    this.editingId = id;
+    document.getElementById('cliente').value = p.cliente || '';
+    document.getElementById('endereco').value = p.endereco || '';
+    document.getElementById('numeroPedido').value = p.numeroPedido || '';
+    document.getElementById('data').value = p.data || '';
+    document.getElementById('valor').value = p.valor || '';
+    document.getElementById('observacoes').value = p.observacoes || '';
+    document.getElementById('qtdAmbientes').value = p.ambientes.length;
+    this.renderAmbientes(p.ambientes);
+    document.getElementById('form-title').textContent = 'Editando Pedido';
+    document.getElementById('submit-text').textContent = 'Atualizar Pedido';
+    document.getElementById('btn-cancel').style.display = 'inline-flex';
+    // remove temporariamente
+    this.pedidos = this.pedidos.filter(x => x.id !== id);
+    this.persist();
+    this.renderCards();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  cancelarEdicao() {
+    this.editingId = null;
+    this.resetForm();
+  }
+
+  resetForm() {
+    document.getElementById('pedido-form').reset();
+    document.getElementById('pedido-id').value = '';
+    document.getElementById('data').valueAsDate = new Date();
+    document.getElementById('qtdAmbientes').value = 1;
+    document.getElementById('form-title').textContent = 'Novo Pedido';
+    document.getElementById('submit-text').textContent = 'Salvar Pedido';
+    document.getElementById('btn-cancel').style.display = 'none';
+    this.editingId = null;
+    this.renderAmbientes();
+  }
+
+  excluir(id) {
+    if (!confirm('Tem certeza que deseja excluir este pedido? Esta ação não pode ser desfeita.')) return;
+    this.pedidos = this.pedidos.filter(p => p.id !== id);
+    this.persist();
+    this.renderCards();
+    this.toast('Pedido excluído.', 'danger');
+  }
+
+  renderCards() {
+    const container = document.getElementById('cards-container');
+    document.getElementById('stat-total').textContent = this.pedidos.length;
+    document.getElementById('stat-amb').textContent = this.pedidos.reduce((a,p)=>a+p.ambientes.length,0);
+    if (!this.pedidos.length) {
+      container.innerHTML = `
+        <div class="empty">
+          <i class="fa-solid fa-folder-open"></i>
+          <h3>Nenhum pedido cadastrado</h3>
+          <p>Preencha o formulário acima para criar seu primeiro pedido.</p>
+        </div>`;
+      return;
+    }
+    container.className = 'cards-grid';
+    container.innerHTML = this.pedidos.map(p => this.cardHTML(p)).join('');
+    container.querySelectorAll('[data-edit]').forEach(b => b.addEventListener('click', () => this.editar(b.dataset.edit)));
+    container.querySelectorAll('[data-del]').forEach(b => b.addEventListener('click', () => this.excluir(b.dataset.del)));
+  }
+
+  cardHTML(p) {
+    const dataFmt = p.data ? new Date(p.data + 'T00:00:00').toLocaleDateString('pt-BR') : '-';
+    const valorFmt = p.valor ? Number(p.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : null;
+    return `
+      <div class="pedido-card">
+        <div class="pedido-head">
+          <div class="pedido-cliente"><i class="fa-solid fa-user"></i> ${this.esc(p.cliente)}</div>
+          ${p.numeroPedido ? `<div class="pedido-numero">#${this.esc(p.numeroPedido)}</div>` : ''}
+        </div>
+        <div class="pedido-meta">
+          <div class="meta-item"><div class="label"><i class="fa-solid fa-calendar"></i> Data</div><div class="value">${dataFmt}</div></div>
+          ${valorFmt ? `<div class="meta-item"><div class="label"><i class="fa-solid fa-dollar-sign"></i> Valor</div><div class="value">${valorFmt}</div></div>` : ''}
+        </div>
+        <div class="pedido-endereco"><i class="fa-solid fa-location-dot"></i> ${this.esc(p.endereco)}</div>
+        <div class="ambientes-list">
+          <h4><i class="fa-solid fa-layer-group"></i> Ambientes (${p.ambientes.length})</h4>
+          ${p.ambientes.map(a => `
+            <div class="amb-item">
+              <div class="amb-item-top">
+                <span class="amb-name"><i class="fa-solid fa-door-open"></i> ${this.esc(a.nome) || 'Ambiente'}</span>
+                <span class="badge ${a.controle === 'Automatizada' ? 'badge-auto' : 'badge-manual'}">
+                  <i class="fa-solid ${a.controle === 'Automatizada' ? 'fa-bolt' : 'fa-hand-pointer'}"></i> ${a.controle}
+                </span>
+              </div>
+              <div class="amb-medidas"><i class="fa-solid fa-ruler-combined"></i> ${this.esc(a.largura)}m × ${this.esc(a.altura)}m</div>
+              <div class="amb-tipo">
+                <span class="badge badge-tipo"><i class="fa-solid fa-window-maximize"></i> ${this.esc(a.tipoCortina)}</span>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+        ${p.observacoes ? `<div class="obs"><i class="fa-solid fa-comment"></i> <div>${this.esc(p.observacoes)}</div></div>` : ''}
+        <div class="pedido-actions">
+          <button class="btn btn-edit btn-sm" data-edit="${p.id}"><i class="fa-solid fa-pen"></i> Editar</button>
+          <button class="btn btn-delete btn-sm" data-del="${p.id}"><i class="fa-solid fa-trash"></i> Excluir</button>
+        </div>
+      </div>`;
+  }
+
+  persist() { localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.pedidos)); }
+
+  esc(v) {
+    if (v === null || v === undefined) return '';
+    return String(v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  toast(msg, type = '') {
+    const t = document.createElement('div');
+    t.className = 'toast ' + type;
+    t.innerHTML = `<i class="fa-solid ${type==='success'?'fa-circle-check':type==='danger'?'fa-circle-exclamation':'fa-circle-info'}"></i> ${msg}`;
+    document.body.appendChild(t);
+    setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateY(20px)'; t.style.transition = 'all .3s'; }, 2200);
+    setTimeout(() => t.remove(), 2600);
+  }
+}
+
+const app = new App();
+app.init();
+</script>
+</body>
+</html>
