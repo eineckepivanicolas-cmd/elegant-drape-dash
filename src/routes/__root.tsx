@@ -72,14 +72,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
+      { title: "Gerenciador de cortinas" },
+      { name: "description", content: "Use este site para deixas seus trabalhos mais organizados e simples." },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { property: "og:title", content: "Gerenciador de cortinas" },
+      { property: "og:description", content: "Use este site para deixas seus trabalhos mais organizados e simples." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "Gerenciador de cortinas" },
+      { name: "twitter:description", content: "Use este site para deixas seus trabalhos mais organizados e simples." },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/ZUpsDOs8tnQqR0aXvm84WdUyiem2/social-images/social-1778438080861-dae23c37-0585-45f8-b7bf-d697cfd16455.webp" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/ZUpsDOs8tnQqR0aXvm84WdUyiem2/social-images/social-1778438080861-dae23c37-0585-45f8-b7bf-d697cfd16455.webp" },
     ],
     links: [
       {
