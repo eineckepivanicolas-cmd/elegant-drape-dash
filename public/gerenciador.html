@@ -732,6 +732,18 @@ class App {
     });
   }
 
+  bindMesDropdown() {
+    const pill = document.getElementById('stat-mes-pill');
+    const dd = document.getElementById('mes-dropdown');
+    pill.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dd.classList.toggle('show');
+    });
+    document.addEventListener('click', (e) => {
+      if (!pill.contains(e.target)) dd.classList.remove('show');
+    });
+  }
+
   renderCards() {
     const container = document.getElementById('cards-container');
     document.getElementById('stat-total').textContent = this.pedidos.length;
