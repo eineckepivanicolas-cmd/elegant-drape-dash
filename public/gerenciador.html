@@ -538,6 +538,7 @@ class App {
     this.pedidos = JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '[]');
     document.getElementById('data').valueAsDate = new Date();
     this.bindEvents();
+    this.bindMesDropdown();
     this.renderAmbientes();
     this.renderCards();
   }
