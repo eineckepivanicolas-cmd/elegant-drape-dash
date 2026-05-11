@@ -625,9 +625,16 @@ class App {
     this.renderCards();
   }
 
-  editar(id) {
+  async editar(id) {
     const p = this.pedidos.find(x => x.id === id);
     if (!p) return;
+    const ok = await this.confirmar({
+      title: 'Editar pedido?',
+      msg: `Deseja editar o pedido de <strong>${p.cliente || 'cliente'}</strong>? Os dados serão carregados no formulário.`,
+      icon: 'fa-pen-to-square',
+      confirmText: 'Sim, editar',
+    });
+    if (!ok) return;
     this.editingId = id;
     document.getElementById('cliente').value = p.cliente || '';
     document.getElementById('endereco').value = p.endereco || '';
