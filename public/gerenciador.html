@@ -736,18 +736,44 @@ class App {
     document.getElementById('stat-total').textContent = this.pedidos.length;
     document.getElementById('stat-amb').textContent = this.pedidos.reduce((a,p)=>a+p.ambientes.length,0);
     const now = new Date();
-    const mesAtual = now.getMonth(), anoAtual = now.getFullYear();
     const meses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-    const totalMes = this.pedidos.reduce((a,p) => {
-      if (!p.data || !p.valor) return a;
+    // Agrupa pedidos por mês/ano
+    const porMes = {};
+    this.pedidos.forEach(p => {
+      if (!p.data) return;
       const d = new Date(p.data);
-      if (isNaN(d)) return a;
-      return (d.getMonth() === mesAtual && d.getFullYear() === anoAtual) ? a + Number(p.valor) : a;
-    }, 0);
+      if (isNaN(d)) return;
+      const k = `${d.getFullYear()}-${d.getMonth()}`;
+      if (!porMes[k]) porMes[k] = { mes: d.getMonth(), ano: d.getFullYear(), total: 0 };
+      porMes[k].total += Number(p.valor) || 0;
+    });
+    const mesesDisponiveis = Object.values(porMes).sort((a,b) => b.ano - a.ano || b.mes - a.mes);
+    // Mês selecionado (ou atual por padrão)
+    const sel = this.mesSelecionado || { mes: now.getMonth(), ano: now.getFullYear() };
+    const totalMes = (porMes[`${sel.ano}-${sel.mes}`]?.total) || 0;
     const totalGeral = this.pedidos.reduce((a,p) => a + (Number(p.valor) || 0), 0);
-    document.getElementById('stat-mes').textContent = `${meses[mesAtual]} ${anoAtual}`;
+    document.getElementById('stat-mes').innerHTML = `${meses[sel.mes]} ${sel.ano} <i class="fa-solid fa-chevron-down" style="font-size:.6rem;"></i>`;
     document.getElementById('stat-valor-mes').textContent = totalMes.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     document.getElementById('stat-valor-total').textContent = totalGeral.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    // Renderiza dropdown
+    const dd = document.getElementById('mes-dropdown');
+    if (!mesesDisponiveis.length) {
+      dd.innerHTML = '<div class="mes-dropdown-empty">Nenhum mês com trabalhos</div>';
+    } else {
+      dd.innerHTML = mesesDisponiveis.map(m => {
+        const ativo = m.mes === sel.mes && m.ano === sel.ano ? 'active' : '';
+        const v = m.total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        return `<div class="mes-dropdown-item ${ativo}" data-mes="${m.mes}" data-ano="${m.ano}"><span>${meses[m.mes]} ${m.ano}</span><span class="v">${v}</span></div>`;
+      }).join('');
+      dd.querySelectorAll('.mes-dropdown-item').forEach(it => {
+        it.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.mesSelecionado = { mes: +it.dataset.mes, ano: +it.dataset.ano };
+          dd.classList.remove('show');
+          this.renderCards();
+        });
+      });
+    }
     if (!this.pedidos.length) {
       container.innerHTML = `
         <div class="empty">
