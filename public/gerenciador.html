@@ -630,8 +630,10 @@ class App {
       if (isNaN(d)) return a;
       return (d.getMonth() === mesAtual && d.getFullYear() === anoAtual) ? a + Number(p.valor) : a;
     }, 0);
+    const totalGeral = this.pedidos.reduce((a,p) => a + (Number(p.valor) || 0), 0);
     document.getElementById('stat-mes').textContent = `${meses[mesAtual]} ${anoAtual}`;
     document.getElementById('stat-valor-mes').textContent = totalMes.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    document.getElementById('stat-valor-total').textContent = totalGeral.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     if (!this.pedidos.length) {
       container.innerHTML = `
         <div class="empty">
