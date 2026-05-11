@@ -387,6 +387,7 @@
       <div class="stat-pill"><i class="fa-solid fa-clipboard-list"></i> <span id="stat-total">0</span> Pedidos</div>
       <div class="stat-pill"><i class="fa-solid fa-layer-group"></i> <span id="stat-amb">0</span> Ambientes</div>
       <div class="stat-pill stacked" title="Total do mês atual"><span class="mes" id="stat-mes">—</span><span class="val"><i class="fa-solid fa-dollar-sign"></i> <span id="stat-valor-mes">R$ 0,00</span></span></div>
+      <div class="stat-pill stacked" title="Total geral acumulado"><span class="mes">Total geral</span><span class="val"><i class="fa-solid fa-sack-dollar"></i> <span id="stat-valor-total">R$ 0,00</span></span></div>
     </div>
   </header>
 
@@ -629,8 +630,10 @@ class App {
       if (isNaN(d)) return a;
       return (d.getMonth() === mesAtual && d.getFullYear() === anoAtual) ? a + Number(p.valor) : a;
     }, 0);
+    const totalGeral = this.pedidos.reduce((a,p) => a + (Number(p.valor) || 0), 0);
     document.getElementById('stat-mes').textContent = `${meses[mesAtual]} ${anoAtual}`;
     document.getElementById('stat-valor-mes').textContent = totalMes.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    document.getElementById('stat-valor-total').textContent = totalGeral.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     if (!this.pedidos.length) {
       container.innerHTML = `
         <div class="empty">
