@@ -671,12 +671,44 @@ class App {
     this.renderAmbientes();
   }
 
-  excluir(id) {
-    if (!confirm('Tem certeza que deseja excluir este pedido? Esta ação não pode ser desfeita.')) return;
+  async excluir(id) {
+    const p = this.pedidos.find(x => x.id === id);
+    const ok = await this.confirmar({
+      title: 'Excluir pedido?',
+      msg: `Tem certeza que deseja excluir o pedido${p ? ` de <strong>${p.cliente || 'cliente'}</strong>` : ''}? Esta ação não pode ser desfeita.`,
+      icon: 'fa-trash',
+      confirmText: 'Sim, excluir',
+      danger: true,
+    });
+    if (!ok) return;
     this.pedidos = this.pedidos.filter(p => p.id !== id);
     this.persist();
     this.renderCards();
     this.toast('Pedido excluído.', 'danger');
+  }
+
+  confirmar({ title, msg, icon = 'fa-circle-question', confirmText = 'Confirmar', cancelText = 'Cancelar', danger = false }) {
+    return new Promise(resolve => {
+      const overlay = document.getElementById('confirm-modal');
+      overlay.querySelector('.modal-icon').className = 'modal-icon' + (danger ? ' danger' : '');
+      overlay.querySelector('.modal-icon').innerHTML = `<i class="fa-solid ${icon}"></i>`;
+      overlay.querySelector('.modal-title').textContent = title;
+      overlay.querySelector('.modal-msg').innerHTML = msg;
+      const btnOk = overlay.querySelector('.modal-btn-confirm');
+      const btnCancel = overlay.querySelector('.modal-btn-cancel');
+      btnOk.textContent = confirmText;
+      btnOk.className = 'modal-btn-confirm' + (danger ? ' danger' : '');
+      btnCancel.textContent = cancelText;
+      overlay.classList.add('active');
+      const finish = (val) => {
+        overlay.classList.remove('active');
+        btnOk.onclick = null; btnCancel.onclick = null; overlay.onclick = null;
+        resolve(val);
+      };
+      btnOk.onclick = () => finish(true);
+      btnCancel.onclick = () => finish(false);
+      overlay.onclick = (e) => { if (e.target === overlay) finish(false); };
+    });
   }
 
   renderCards() {
