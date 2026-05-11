@@ -362,6 +362,61 @@
     to { opacity: 1; transform: none; }
   }
 
+  /* Modal de confirmação */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(6, 26, 61, 0.55);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center; justify-content: center;
+    z-index: 1000;
+    animation: fadeIn .2s ease;
+  }
+  .modal-overlay.active { display: flex; }
+  .modal-box {
+    background: #fff;
+    border-radius: 18px;
+    padding: 28px;
+    max-width: 440px; width: calc(100% - 32px);
+    box-shadow: 0 20px 60px rgba(11, 42, 91, 0.35);
+    border: 1px solid #e3ebf7;
+    animation: modalIn .25s cubic-bezier(.4,0,.2,1);
+  }
+  .modal-icon {
+    width: 56px; height: 56px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; color: #fff;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+  }
+  .modal-icon.danger { background: linear-gradient(135deg, #b91c1c, #ef4444); }
+  .modal-title {
+    font-size: 1.2rem; font-weight: 800;
+    color: var(--text); margin-bottom: 8px;
+  }
+  .modal-msg { color: #475569; line-height: 1.5; margin-bottom: 22px; }
+  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
+  .modal-actions button {
+    padding: 10px 18px; border-radius: 10px;
+    font-weight: 700; font-size: .95rem; cursor: pointer;
+    border: none; transition: transform .15s, box-shadow .15s;
+  }
+  .modal-actions button:hover { transform: translateY(-1px); }
+  .modal-btn-cancel {
+    background: #f5f8fc; color: var(--text);
+    border: 1px solid #b6c2d4 !important;
+  }
+  .modal-btn-confirm {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+    color: #fff; box-shadow: var(--shadow-md);
+  }
+  .modal-btn-confirm.danger { background: linear-gradient(135deg, #b91c1c, #ef4444); }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes modalIn {
+    from { opacity: 0; transform: scale(.92) translateY(10px); }
+    to { opacity: 1; transform: none; }
+  }
+
   @media (max-width: 640px) {
     .container { padding: 14px; }
     .section { padding: 20px; }
@@ -570,9 +625,16 @@ class App {
     this.renderCards();
   }
 
-  editar(id) {
+  async editar(id) {
     const p = this.pedidos.find(x => x.id === id);
     if (!p) return;
+    const ok = await this.confirmar({
+      title: 'Editar pedido?',
+      msg: `Deseja editar o pedido de <strong>${p.cliente || 'cliente'}</strong>? Os dados serão carregados no formulário.`,
+      icon: 'fa-pen-to-square',
+      confirmText: 'Sim, editar',
+    });
+    if (!ok) return;
     this.editingId = id;
     document.getElementById('cliente').value = p.cliente || '';
     document.getElementById('endereco').value = p.endereco || '';
@@ -609,12 +671,44 @@ class App {
     this.renderAmbientes();
   }
 
-  excluir(id) {
-    if (!confirm('Tem certeza que deseja excluir este pedido? Esta ação não pode ser desfeita.')) return;
+  async excluir(id) {
+    const p = this.pedidos.find(x => x.id === id);
+    const ok = await this.confirmar({
+      title: 'Excluir pedido?',
+      msg: `Tem certeza que deseja excluir o pedido${p ? ` de <strong>${p.cliente || 'cliente'}</strong>` : ''}? Esta ação não pode ser desfeita.`,
+      icon: 'fa-trash',
+      confirmText: 'Sim, excluir',
+      danger: true,
+    });
+    if (!ok) return;
     this.pedidos = this.pedidos.filter(p => p.id !== id);
     this.persist();
     this.renderCards();
     this.toast('Pedido excluído.', 'danger');
+  }
+
+  confirmar({ title, msg, icon = 'fa-circle-question', confirmText = 'Confirmar', cancelText = 'Cancelar', danger = false }) {
+    return new Promise(resolve => {
+      const overlay = document.getElementById('confirm-modal');
+      overlay.querySelector('.modal-icon').className = 'modal-icon' + (danger ? ' danger' : '');
+      overlay.querySelector('.modal-icon').innerHTML = `<i class="fa-solid ${icon}"></i>`;
+      overlay.querySelector('.modal-title').textContent = title;
+      overlay.querySelector('.modal-msg').innerHTML = msg;
+      const btnOk = overlay.querySelector('.modal-btn-confirm');
+      const btnCancel = overlay.querySelector('.modal-btn-cancel');
+      btnOk.textContent = confirmText;
+      btnOk.className = 'modal-btn-confirm' + (danger ? ' danger' : '');
+      btnCancel.textContent = cancelText;
+      overlay.classList.add('active');
+      const finish = (val) => {
+        overlay.classList.remove('active');
+        btnOk.onclick = null; btnCancel.onclick = null; overlay.onclick = null;
+        resolve(val);
+      };
+      btnOk.onclick = () => finish(true);
+      btnCancel.onclick = () => finish(false);
+      overlay.onclick = (e) => { if (e.target === overlay) finish(false); };
+    });
   }
 
   renderCards() {
@@ -708,5 +802,16 @@ class App {
 const app = new App();
 app.init();
 </script>
+<div class="modal-overlay" id="confirm-modal" role="dialog" aria-modal="true">
+  <div class="modal-box">
+    <div class="modal-icon"><i class="fa-solid fa-circle-question"></i></div>
+    <div class="modal-title">Confirmar</div>
+    <div class="modal-msg"></div>
+    <div class="modal-actions">
+      <button type="button" class="modal-btn-cancel">Cancelar</button>
+      <button type="button" class="modal-btn-confirm">Confirmar</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
