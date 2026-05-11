@@ -620,6 +620,17 @@ class App {
     const container = document.getElementById('cards-container');
     document.getElementById('stat-total').textContent = this.pedidos.length;
     document.getElementById('stat-amb').textContent = this.pedidos.reduce((a,p)=>a+p.ambientes.length,0);
+    const now = new Date();
+    const mesAtual = now.getMonth(), anoAtual = now.getFullYear();
+    const meses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+    const totalMes = this.pedidos.reduce((a,p) => {
+      if (!p.data || !p.valor) return a;
+      const d = new Date(p.data);
+      if (isNaN(d)) return a;
+      return (d.getMonth() === mesAtual && d.getFullYear() === anoAtual) ? a + Number(p.valor) : a;
+    }, 0);
+    document.getElementById('stat-mes').textContent = `${meses[mesAtual]} ${anoAtual}`;
+    document.getElementById('stat-valor-mes').textContent = totalMes.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     if (!this.pedidos.length) {
       container.innerHTML = `
         <div class="empty">
