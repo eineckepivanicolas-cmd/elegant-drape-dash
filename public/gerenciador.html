@@ -802,5 +802,16 @@ class App {
 const app = new App();
 app.init();
 </script>
+<div class="modal-overlay" id="confirm-modal" role="dialog" aria-modal="true">
+  <div class="modal-box">
+    <div class="modal-icon"><i class="fa-solid fa-circle-question"></i></div>
+    <div class="modal-title">Confirmar</div>
+    <div class="modal-msg"></div>
+    <div class="modal-actions">
+      <button type="button" class="modal-btn-cancel">Cancelar</button>
+      <button type="button" class="modal-btn-confirm">Confirmar</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
