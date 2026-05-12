@@ -65,15 +65,15 @@
     gap: 16px;
     flex-wrap: wrap;
     position: relative;
-    overflow: hidden;
   }
   header.app-header::after {
     content: "";
     position: absolute;
-    right: -60px; top: -60px;
-    width: 220px; height: 220px;
-    background: radial-gradient(circle, rgba(255,255,255,.15), transparent 70%);
-    border-radius: 50%;
+    right: 0; top: 0;
+    width: 160px; height: 160px;
+    background: radial-gradient(circle at top right, rgba(255,255,255,.18), transparent 70%);
+    border-top-right-radius: var(--radius-lg);
+    pointer-events: none;
   }
   header.app-header .brand { display: flex; align-items: center; gap: 16px; }
   header.app-header .brand .logo {
@@ -112,7 +112,7 @@
     position: absolute; top: calc(100% + 8px); left: 50%; transform: translateX(-50%);
     background: #fff; color: var(--text); border: 1px solid #e3ebf7;
     border-radius: 12px; box-shadow: 0 12px 32px rgba(20,40,80,.18);
-    min-width: 200px; max-height: 280px; overflow-y: auto; z-index: 100;
+    min-width: 220px; max-height: 280px; overflow-y: auto; z-index: 1001;
     padding: 6px; display: none; text-align: left;
   }
   .mes-dropdown.show { display: block; animation: fadeIn .15s ease; }
@@ -826,7 +826,7 @@ class App {
                   <i class="fa-solid ${a.controle === 'Automatizada' ? 'fa-bolt' : 'fa-hand-pointer'}"></i> ${a.controle}
                 </span>
               </div>
-              <div class="amb-medidas"><i class="fa-solid fa-ruler-combined"></i> ${this.esc(a.largura)}m × ${this.esc(a.altura)}m</div>
+              <div class="amb-medidas"><i class="fa-solid fa-ruler-combined"></i> Largura: <strong>${this.esc(a.largura)}m</strong> &nbsp;×&nbsp; Altura: <strong>${this.esc(a.altura)}m</strong></div>
               <div class="amb-tipo">
                 <span class="badge badge-tipo"><i class="fa-solid fa-window-maximize"></i> ${this.esc(a.tipoCortina)}</span>
               </div>
