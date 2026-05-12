@@ -251,7 +251,16 @@
     background: var(--danger-soft); color: var(--danger);
   }
   .btn-delete:hover { background: var(--danger); color: #fff; }
+  .btn-print { background: var(--primary-soft); color: var(--primary-dark); }
+  .btn-print:hover { background: var(--primary); color: #fff; }
+  .btn-wpp { background: #d1fae5; color: #047857; }
+  .btn-wpp:hover { background: #25d366; color: #fff; }
   .btn-sm { padding: 8px 14px; font-size: .85rem; }
+  .nf-row { margin-bottom: 12px; }
+  .badge-nf { cursor: pointer; border: none; font-family: inherit; transition: transform .15s, box-shadow .15s; }
+  .badge-nf:hover { transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+  .nf-sim { background: var(--success-soft); color: var(--success); }
+  .nf-nao { background: var(--danger-soft); color: var(--danger); }
 
   /* CARDS */
   .cards-grid {
@@ -490,6 +499,17 @@
           <label><i class="fa-solid fa-dollar-sign"></i> Valor <span class="opt">(opcional)</span></label>
           <input type="number" id="valor" step="0.01" min="0" placeholder="R$ 0,00" />
         </div>
+        <div class="field">
+          <label><i class="fa-brands fa-whatsapp"></i> Telefone / WhatsApp <span class="opt">(opcional)</span></label>
+          <input type="tel" id="telefone" placeholder="(11) 91234-5678" />
+        </div>
+        <div class="field">
+          <label><i class="fa-solid fa-file-invoice"></i> Nota fiscal emitida?</label>
+          <select id="notaFiscal">
+            <option value="nao">Não emitida</option>
+            <option value="sim">Sim, emitida</option>
+          </select>
+        </div>
         <div class="field full">
           <label><i class="fa-solid fa-location-dot"></i> Endereço</label>
           <input type="text" id="endereco" required placeholder="Rua, número, bairro, cidade" />
@@ -627,6 +647,8 @@ class App {
       numeroPedido: document.getElementById('numeroPedido').value.trim(),
       data: document.getElementById('data').value,
       valor: document.getElementById('valor').value,
+      telefone: document.getElementById('telefone').value.trim(),
+      notaFiscal: document.getElementById('notaFiscal').value,
       observacoes: document.getElementById('observacoes').value.trim(),
       ambientes: this.coletarAmbientes()
     };
@@ -662,6 +684,8 @@ class App {
     document.getElementById('numeroPedido').value = p.numeroPedido || '';
     document.getElementById('data').value = p.data || '';
     document.getElementById('valor').value = p.valor || '';
+    document.getElementById('telefone').value = p.telefone || '';
+    document.getElementById('notaFiscal').value = p.notaFiscal || 'nao';
     document.getElementById('observacoes').value = p.observacoes || '';
     document.getElementById('qtdAmbientes').value = p.ambientes.length;
     this.renderAmbientes(p.ambientes);
@@ -800,20 +824,31 @@ class App {
     container.innerHTML = this.pedidos.map(p => this.cardHTML(p)).join('');
     container.querySelectorAll('[data-edit]').forEach(b => b.addEventListener('click', () => this.editar(b.dataset.edit)));
     container.querySelectorAll('[data-del]').forEach(b => b.addEventListener('click', () => this.excluir(b.dataset.del)));
+    container.querySelectorAll('[data-print]').forEach(b => b.addEventListener('click', () => this.imprimir(b.dataset.print)));
+    container.querySelectorAll('[data-wpp]').forEach(b => b.addEventListener('click', () => this.whatsapp(b.dataset.wpp)));
+    container.querySelectorAll('[data-nf]').forEach(b => b.addEventListener('click', () => this.toggleNotaFiscal(b.dataset.nf)));
   }
 
   cardHTML(p) {
     const dataFmt = p.data ? new Date(p.data + 'T00:00:00').toLocaleDateString('pt-BR') : '-';
     const valorFmt = p.valor ? Number(p.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : null;
+    const nfEmitida = p.notaFiscal === 'sim';
     return `
       <div class="pedido-card">
         <div class="pedido-head">
           <div class="pedido-cliente"><i class="fa-solid fa-user"></i> ${this.esc(p.cliente)}</div>
           ${p.numeroPedido ? `<div class="pedido-numero">#${this.esc(p.numeroPedido)}</div>` : ''}
         </div>
+        <div class="nf-row">
+          <button class="badge badge-nf ${nfEmitida ? 'nf-sim' : 'nf-nao'}" data-nf="${p.id}" title="Clique para alternar">
+            <i class="fa-solid ${nfEmitida ? 'fa-circle-check' : 'fa-circle-xmark'}"></i>
+            Nota fiscal ${nfEmitida ? 'emitida' : 'não emitida'}
+          </button>
+        </div>
         <div class="pedido-meta">
           <div class="meta-item"><div class="label"><i class="fa-solid fa-calendar"></i> Data</div><div class="value">${dataFmt}</div></div>
           ${valorFmt ? `<div class="meta-item"><div class="label"><i class="fa-solid fa-dollar-sign"></i> Valor</div><div class="value">${valorFmt}</div></div>` : ''}
+          ${p.telefone ? `<div class="meta-item"><div class="label"><i class="fa-brands fa-whatsapp"></i> Telefone</div><div class="value">${this.esc(p.telefone)}</div></div>` : ''}
         </div>
         <div class="pedido-endereco"><i class="fa-solid fa-location-dot"></i> ${this.esc(p.endereco)}</div>
         <div class="ambientes-list">
@@ -836,9 +871,85 @@ class App {
         ${p.observacoes ? `<div class="obs"><i class="fa-solid fa-comment"></i> <div>${this.esc(p.observacoes)}</div></div>` : ''}
         <div class="pedido-actions">
           <button class="btn btn-edit btn-sm" data-edit="${p.id}"><i class="fa-solid fa-pen"></i> Editar</button>
+          <button class="btn btn-print btn-sm" data-print="${p.id}"><i class="fa-solid fa-print"></i> PDF</button>
+          <button class="btn btn-wpp btn-sm" data-wpp="${p.id}"><i class="fa-brands fa-whatsapp"></i> WhatsApp</button>
           <button class="btn btn-delete btn-sm" data-del="${p.id}"><i class="fa-solid fa-trash"></i> Excluir</button>
         </div>
       </div>`;
+  }
+
+  toggleNotaFiscal(id) {
+    const p = this.pedidos.find(x => x.id === id);
+    if (!p) return;
+    p.notaFiscal = p.notaFiscal === 'sim' ? 'nao' : 'sim';
+    this.persist();
+    this.renderCards();
+    this.toast(p.notaFiscal === 'sim' ? 'Nota fiscal marcada como emitida.' : 'Nota fiscal marcada como não emitida.', 'success');
+  }
+
+  imprimir(id) {
+    const p = this.pedidos.find(x => x.id === id);
+    if (!p) return;
+    const dataFmt = p.data ? new Date(p.data + 'T00:00:00').toLocaleDateString('pt-BR') : '-';
+    const valorFmt = p.valor ? Number(p.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '-';
+    const nfTxt = p.notaFiscal === 'sim' ? 'Emitida' : 'Não emitida';
+    const ambHtml = p.ambientes.map((a, i) => `
+      <tr><td>${i+1}</td><td>${this.esc(a.nome) || '-'}</td><td>${this.esc(a.largura)}m</td><td>${this.esc(a.altura)}m</td><td>${this.esc(a.tipoCortina)}</td><td>${this.esc(a.controle)}</td></tr>`).join('');
+    const html = `<!doctype html><html><head><meta charset="utf-8"><title>Pedido ${this.esc(p.cliente)}</title>
+<style>
+body{font-family:Arial,sans-serif;color:#0a1628;padding:32px;max-width:780px;margin:0 auto;}
+h1{color:#0b2a5b;border-bottom:3px solid #0b2a5b;padding-bottom:10px;margin-bottom:18px;}
+h2{color:#0b2a5b;margin-top:24px;font-size:1.1rem;}
+.row{display:flex;flex-wrap:wrap;gap:12px;margin:8px 0 16px;}
+.info{background:#f5f8fc;border:1px solid #d6dee9;border-radius:8px;padding:10px 14px;flex:1;min-width:180px;}
+.info b{display:block;font-size:.75rem;color:#4a5878;text-transform:uppercase;margin-bottom:2px;}
+.nf{display:inline-block;padding:6px 14px;border-radius:999px;font-weight:700;font-size:.85rem;}
+.nf-sim{background:#d1fae5;color:#047857;} .nf-nao{background:#fee2e2;color:#b91c1c;}
+table{width:100%;border-collapse:collapse;margin-top:8px;}
+th,td{border:1px solid #d6dee9;padding:8px 10px;text-align:left;font-size:.9rem;}
+th{background:#0b2a5b;color:#fff;}
+.obs{background:#fffbeb;border:1px solid #fde68a;padding:12px;border-radius:8px;margin-top:16px;color:#78350f;}
+@media print{body{padding:14px;}}
+</style></head><body>
+<h1>Pedido — ${this.esc(p.cliente)} ${p.numeroPedido ? `<span style="float:right;font-size:.9rem;">#${this.esc(p.numeroPedido)}</span>` : ''}</h1>
+<div class="row">
+  <div class="info"><b>Data</b>${dataFmt}</div>
+  <div class="info"><b>Valor</b>${valorFmt}</div>
+  ${p.telefone ? `<div class="info"><b>Telefone</b>${this.esc(p.telefone)}</div>` : ''}
+</div>
+<div class="info"><b>Endereço</b>${this.esc(p.endereco)}</div>
+<p style="margin-top:14px;"><span class="nf ${p.notaFiscal === 'sim' ? 'nf-sim' : 'nf-nao'}">Nota fiscal: ${nfTxt}</span></p>
+<h2>Ambientes (${p.ambientes.length})</h2>
+<table><thead><tr><th>#</th><th>Nome</th><th>Largura</th><th>Altura</th><th>Tipo</th><th>Controle</th></tr></thead><tbody>${ambHtml}</tbody></table>
+${p.observacoes ? `<div class="obs"><b>Observações:</b><br>${this.esc(p.observacoes)}</div>` : ''}
+<p style="margin-top:30px;font-size:.8rem;color:#4a5878;text-align:center;">Gerado por Gerenciador Cortinas</p>
+<script>window.onload=function(){setTimeout(function(){window.print();},300);};<\/script>
+</body></html>`;
+    const w = window.open('', '_blank');
+    if (!w) { this.toast('Permita pop-ups para imprimir/salvar PDF.', 'danger'); return; }
+    w.document.write(html); w.document.close();
+  }
+
+  whatsapp(id) {
+    const p = this.pedidos.find(x => x.id === id);
+    if (!p) return;
+    const dataFmt = p.data ? new Date(p.data + 'T00:00:00').toLocaleDateString('pt-BR') : '-';
+    const valorFmt = p.valor ? Number(p.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '-';
+    const nfTxt = p.notaFiscal === 'sim' ? '✅ Emitida' : '❌ Não emitida';
+    const ambs = p.ambientes.map((a,i) => `${i+1}. *${a.nome || 'Ambiente'}* — ${a.largura}m × ${a.altura}m — ${a.tipoCortina} (${a.controle})`).join('\n');
+    const txt = `*Pedido — ${p.cliente}*${p.numeroPedido ? ` (#${p.numeroPedido})` : ''}
+📅 Data: ${dataFmt}
+💰 Valor: ${valorFmt}
+📍 Endereço: ${p.endereco}
+🧾 Nota fiscal: ${nfTxt}
+
+*Ambientes (${p.ambientes.length}):*
+${ambs}${p.observacoes ? `\n\n📝 Obs: ${p.observacoes}` : ''}`;
+    const fone = (p.telefone || '').replace(/\D/g, '');
+    const url = fone
+      ? `https://wa.me/${fone.length <= 11 ? '55' + fone : fone}?text=${encodeURIComponent(txt)}`
+      : `https://wa.me/?text=${encodeURIComponent(txt)}`;
+    window.open(url, '_blank');
   }
 
   persist() { localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.pedidos)); }
