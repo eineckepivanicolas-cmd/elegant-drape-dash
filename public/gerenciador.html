@@ -490,6 +490,17 @@
           <label><i class="fa-solid fa-dollar-sign"></i> Valor <span class="opt">(opcional)</span></label>
           <input type="number" id="valor" step="0.01" min="0" placeholder="R$ 0,00" />
         </div>
+        <div class="field">
+          <label><i class="fa-brands fa-whatsapp"></i> Telefone / WhatsApp <span class="opt">(opcional)</span></label>
+          <input type="tel" id="telefone" placeholder="(11) 91234-5678" />
+        </div>
+        <div class="field">
+          <label><i class="fa-solid fa-file-invoice"></i> Nota fiscal emitida?</label>
+          <select id="notaFiscal">
+            <option value="nao">Não emitida</option>
+            <option value="sim">Sim, emitida</option>
+          </select>
+        </div>
         <div class="field full">
           <label><i class="fa-solid fa-location-dot"></i> Endereço</label>
           <input type="text" id="endereco" required placeholder="Rua, número, bairro, cidade" />
