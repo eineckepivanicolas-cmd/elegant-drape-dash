@@ -815,6 +815,9 @@ class App {
     container.innerHTML = this.pedidos.map(p => this.cardHTML(p)).join('');
     container.querySelectorAll('[data-edit]').forEach(b => b.addEventListener('click', () => this.editar(b.dataset.edit)));
     container.querySelectorAll('[data-del]').forEach(b => b.addEventListener('click', () => this.excluir(b.dataset.del)));
+    container.querySelectorAll('[data-print]').forEach(b => b.addEventListener('click', () => this.imprimir(b.dataset.print)));
+    container.querySelectorAll('[data-wpp]').forEach(b => b.addEventListener('click', () => this.whatsapp(b.dataset.wpp)));
+    container.querySelectorAll('[data-nf]').forEach(b => b.addEventListener('click', () => this.toggleNotaFiscal(b.dataset.nf)));
   }
 
   cardHTML(p) {
