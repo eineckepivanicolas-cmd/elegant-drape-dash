@@ -596,7 +596,20 @@ class App {
         this.renderAmbientes();
       }, 0);
     });
+    document.getElementById('pedido-form').addEventListener('reset', () => {
+      setTimeout(() => this.setNotaFiscal('nao'), 0);
+    });
+    document.querySelectorAll('.nf-toggle .nf-opt').forEach(b => {
+      b.addEventListener('click', () => this.setNotaFiscal(b.dataset.nf));
+    });
     document.getElementById('btn-cancel').addEventListener('click', () => this.cancelarEdicao());
+  }
+
+  setNotaFiscal(val) {
+    document.getElementById('notaFiscal').value = val;
+    document.querySelectorAll('.nf-toggle .nf-opt').forEach(b => {
+      b.classList.toggle('active', b.dataset.nf === val);
+    });
   }
 
   renderAmbientes(dados = null) {
