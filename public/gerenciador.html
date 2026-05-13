@@ -504,11 +504,12 @@
           <input type="tel" id="telefone" placeholder="(11) 91234-5678" />
         </div>
         <div class="field">
-          <label><i class="fa-solid fa-file-invoice"></i> Nota fiscal emitida?</label>
-          <select id="notaFiscal">
-            <option value="nao">Não emitida</option>
-            <option value="sim">Sim, emitida</option>
-          </select>
+          <label><i class="fa-solid fa-file-invoice"></i> Nota fiscal</label>
+          <div class="nf-toggle">
+            <button type="button" class="nf-opt" data-nf="sim"><i class="fa-solid fa-circle-check"></i> Já emitida</button>
+            <button type="button" class="nf-opt active" data-nf="nao"><i class="fa-solid fa-hourglass-half"></i> Ainda não emitida</button>
+          </div>
+          <input type="hidden" id="notaFiscal" value="nao" />
         </div>
         <div class="field full">
           <label><i class="fa-solid fa-location-dot"></i> Endereço</label>
