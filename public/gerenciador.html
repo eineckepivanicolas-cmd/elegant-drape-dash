@@ -262,6 +262,25 @@
   .nf-sim { background: var(--success-soft); color: var(--success); }
   .nf-nao { background: var(--danger-soft); color: var(--danger); }
 
+  /* NOTA FISCAL TOGGLE */
+  .nf-toggle { display: flex; gap: 8px; flex-wrap: wrap; }
+  .nf-opt {
+    flex: 1 1 auto; min-width: 140px;
+    border: 1.5px solid var(--border);
+    background: var(--surface-2);
+    color: var(--muted);
+    font-family: inherit; font-size: .9rem; font-weight: 600;
+    padding: 11px 16px; border-radius: var(--radius-sm);
+    cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    transition: all .2s ease;
+  }
+  .nf-opt:hover { border-color: var(--primary); color: var(--primary); }
+  .nf-opt.active {
+    background: linear-gradient(135deg, var(--primary), #1e40af);
+    color: #fff; border-color: transparent;
+    box-shadow: 0 4px 12px rgba(11,42,91,.25);
+  }
+
   /* CARDS */
   .cards-grid {
     display: grid;
