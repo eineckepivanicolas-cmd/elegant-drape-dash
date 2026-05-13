@@ -936,7 +936,7 @@ ${p.observacoes ? `<div class="obs"><b>Observações:</b><br>${this.esc(p.observ
     const dataFmt = p.data ? new Date(p.data + 'T00:00:00').toLocaleDateString('pt-BR') : '-';
     const valorFmt = p.valor ? Number(p.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '-';
     const nfTxt = p.notaFiscal === 'sim' ? '✅ Emitida' : '❌ Não emitida';
-    const ambs = p.ambientes.map((a,i) => `${i+1}. *${a.nome || 'Ambiente'}* — ${a.largura}m × ${a.altura}m — ${a.tipoCortina} (${a.controle})`).join('\n');
+    const ambs = p.ambientes.map((a,i) => `${i+1}. *${a.nome || 'Ambiente'}*\n   • Largura: ${a.largura}m\n   • Altura: ${a.altura}m\n   • Tipo: ${a.tipoCortina}\n   • Controle: ${a.controle}`).join('\n\n');
     const txt = `*Pedido — ${p.cliente}*${p.numeroPedido ? ` (#${p.numeroPedido})` : ''}
 📅 Data: ${dataFmt}
 💰 Valor: ${valorFmt}
