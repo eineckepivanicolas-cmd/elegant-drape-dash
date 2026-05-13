@@ -10,26 +10,27 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <style>
   :root {
-    --bg: #ffffff;
+    --bg: #f5f8fc;
     --surface: #ffffff;
-    --surface-2: #f5f8fc;
+    --surface-2: #eef3fa;
     --text: #0a1628;
-    --muted: #4a5878;
+    --muted: #5a6a85;
     --border: #d6dee9;
     --primary: #0b2a5b;
+    --primary-2: #1e40af;
     --primary-dark: #061a3d;
     --primary-soft: #e3ebf7;
     --success: #047857;
     --success-soft: #d1fae5;
-    --warning: #b45309;
-    --warning-soft: #fef3c7;
     --danger: #b91c1c;
     --danger-soft: #fee2e2;
     --info: #1e40af;
     --info-soft: #dbeafe;
-    --shadow-sm: 0 1px 2px rgba(11,42,91,.08), 0 1px 3px rgba(11,42,91,.05);
-    --shadow-md: 0 6px 18px rgba(11,42,91,.10), 0 2px 6px rgba(11,42,91,.06);
-    --shadow-lg: 0 16px 40px rgba(11,42,91,.18), 0 6px 16px rgba(11,42,91,.10);
+    --warning: #b45309;
+    --warning-soft: #fef3c7;
+    --shadow-sm: 0 1px 3px rgba(11,42,91,.08);
+    --shadow-md: 0 6px 20px rgba(11,42,91,.10);
+    --shadow-lg: 0 16px 40px rgba(11,42,91,.18);
     --radius: 14px;
     --radius-sm: 10px;
     --radius-lg: 20px;
@@ -40,9 +41,6 @@
   body {
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     background: var(--bg);
-    background-image:
-      radial-gradient(circle at 0% 0%, rgba(11,42,91,.06), transparent 40%),
-      radial-gradient(circle at 100% 0%, rgba(30,64,175,.05), transparent 40%);
     color: var(--text);
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
@@ -55,79 +53,40 @@
   header.app-header {
     background: linear-gradient(135deg, #061a3d 0%, #0b2a5b 50%, #1e40af 100%);
     color: #fff;
-    padding: 32px 24px;
+    padding: 28px 24px;
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
-    margin-bottom: 28px;
+    margin-bottom: 24px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
     flex-wrap: wrap;
-    position: relative;
   }
-  header.app-header::after {
-    content: "";
-    position: absolute;
-    right: 0; top: 0;
-    width: 160px; height: 160px;
-    background: radial-gradient(circle at top right, rgba(255,255,255,.18), transparent 70%);
-    border-top-right-radius: var(--radius-lg);
-    pointer-events: none;
-  }
-  header.app-header .brand { display: flex; align-items: center; gap: 16px; }
-  header.app-header .brand .logo {
-    width: 56px; height: 56px;
-    background: rgba(255,255,255,.18);
-    backdrop-filter: blur(10px);
+  .brand { display: flex; align-items: center; gap: 14px; }
+  .brand .logo {
+    width: 52px; height: 52px;
+    background: rgba(255,255,255,.15);
+    border: 1px solid rgba(255,255,255,.2);
     border-radius: 14px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 24px;
-    border: 1px solid rgba(255,255,255,.2);
+    font-size: 22px;
   }
-  header.app-header h1 { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; }
-  header.app-header p { opacity: .85; font-size: .92rem; margin-top: 2px; }
-  .stats {
-    display: flex; gap: 12px; flex-wrap: wrap; z-index: 1;
-  }
+  .brand h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; }
+  .brand p { opacity: .85; font-size: .88rem; margin-top: 2px; }
+  .stats { display: flex; gap: 12px; flex-wrap: wrap; }
   .stat-pill {
-    background: rgba(255,255,255,.15);
-    backdrop-filter: blur(10px);
-    padding: 10px 16px;
-    border-radius: 999px;
-    font-size: .85rem;
-    font-weight: 600;
+    background: rgba(255,255,255,.13);
     border: 1px solid rgba(255,255,255,.2);
-    display: flex; align-items: center; gap: 8px;
+    padding: 10px 18px;
+    border-radius: 14px;
+    display: flex; flex-direction: column; align-items: flex-start;
+    line-height: 1.2;
   }
-  .stat-pill.stacked {
-    flex-direction: column; align-items: center; gap: 2px;
-    padding: 8px 18px; border-radius: 14px; line-height: 1.15;
-  }
-  .stat-pill.stacked .mes { font-size: .72rem; opacity: .85; text-transform: uppercase; letter-spacing: .08em; display:inline-flex; align-items:center; gap:6px; }
-  .stat-pill.stacked .val { font-size: 1rem; font-weight: 800; }
-  .stat-pill.clickable { cursor: pointer; transition: transform .15s, background .2s; position: relative; }
-  .stat-pill.clickable:hover { background: rgba(255,255,255,.22); transform: translateY(-1px); }
-  .mes-dropdown {
-    position: absolute; top: calc(100% + 8px); left: 50%; transform: translateX(-50%);
-    background: #fff; color: var(--text); border: 1px solid #e3ebf7;
-    border-radius: 12px; box-shadow: 0 12px 32px rgba(20,40,80,.18);
-    min-width: 220px; max-height: 280px; overflow-y: auto; z-index: 1001;
-    padding: 6px; display: none; text-align: left;
-  }
-  .mes-dropdown.show { display: block; animation: fadeIn .15s ease; }
-  .mes-dropdown-item {
-    padding: 10px 12px; border-radius: 8px; cursor: pointer;
-    display: flex; justify-content: space-between; align-items: center; gap: 12px;
-    font-size: .85rem; font-weight: 600; text-transform: none; letter-spacing: 0;
-    color: var(--text);
-  }
-  .mes-dropdown-item:hover { background: var(--primary-soft); color: var(--primary-dark); }
-  .mes-dropdown-item.active { background: var(--primary); color: #fff; }
-  .mes-dropdown-item .v { font-weight: 700; opacity: .9; font-size: .8rem; }
-  .mes-dropdown-empty { padding: 14px; text-align: center; color: #6b7a90; font-size: .8rem; }
+  .stat-pill .lbl { font-size: .7rem; opacity: .8; text-transform: uppercase; letter-spacing: .08em; font-weight: 600; }
+  .stat-pill .val { font-size: 1.1rem; font-weight: 800; margin-top: 2px; }
 
-  /* SECTIONS */
+  /* SECTION CARD */
   .section {
     background: var(--surface);
     border-radius: var(--radius-lg);
@@ -138,8 +97,7 @@
   }
   .section-title {
     display: flex; align-items: center; gap: 12px;
-    font-size: 1.2rem; font-weight: 700; margin-bottom: 20px;
-    color: var(--text);
+    font-size: 1.2rem; font-weight: 700; margin-bottom: 22px;
   }
   .section-title i {
     width: 36px; height: 36px;
@@ -147,6 +105,12 @@
     border-radius: 10px;
     display: flex; align-items: center; justify-content: center;
     font-size: 15px;
+  }
+  .section-title .count {
+    margin-left: auto;
+    background: var(--primary-soft); color: var(--primary-dark);
+    padding: 4px 12px; border-radius: 999px;
+    font-size: .8rem; font-weight: 700;
   }
 
   /* FORM */
@@ -161,7 +125,7 @@
     font-size: .82rem; font-weight: 600; color: var(--muted);
     display: flex; align-items: center; gap: 6px;
   }
-  label .opt { color: var(--muted); font-weight: 400; font-size: .75rem; opacity: .7; }
+  label .opt { color: var(--muted); font-weight: 400; font-size: .72rem; opacity: .75; }
   input, select, textarea {
     font-family: inherit;
     font-size: .95rem;
@@ -183,40 +147,46 @@
   textarea { resize: vertical; min-height: 80px; }
 
   /* AMBIENTES */
-  .ambientes-wrap {
-    margin-top: 24px;
-    display: grid; gap: 16px;
+  .ambientes-wrap { margin-top: 24px; display: grid; gap: 16px; }
+  .ambientes-wrap .ambientes-title {
+    font-weight: 700; display: flex; align-items: center; gap: 10px;
+    color: var(--text); font-size: 1rem;
+  }
+  .ambientes-title i { color: var(--primary); }
+  .ambientes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 14px;
   }
   .ambiente-card {
     background: linear-gradient(135deg, #f5f8fc, #e3ebf7);
     border: 1.5px solid var(--border);
     border-left: 4px solid var(--primary);
     border-radius: var(--radius);
-    padding: 20px;
+    padding: 18px;
     animation: slideIn .35s ease;
   }
   @keyframes slideIn {
-    from { opacity: 0; transform: translateY(-8px); }
+    from { opacity: 0; transform: translateY(-6px); }
     to { opacity: 1; transform: none; }
   }
-  .ambiente-header {
+  .ambiente-head {
     display: flex; align-items: center; gap: 10px;
     font-weight: 700; color: var(--primary-dark);
-    margin-bottom: 14px;
-    font-size: 1rem;
+    margin-bottom: 12px; font-size: .95rem;
+    text-transform: uppercase; letter-spacing: .04em;
   }
-  .ambiente-header .num {
+  .ambiente-head .num {
     background: var(--primary); color: #fff;
-    width: 28px; height: 28px;
+    width: 26px; height: 26px;
     border-radius: 8px;
     display: flex; align-items: center; justify-content: center;
-    font-size: .85rem;
-    box-shadow: 0 4px 10px rgba(79,70,229,.3);
+    font-size: .8rem;
   }
   .ambiente-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px;
   }
 
   /* BUTTONS */
@@ -228,60 +198,26 @@
     border-radius: var(--radius-sm);
     display: inline-flex; align-items: center; gap: 8px;
     transition: all .2s ease;
-    text-decoration: none;
   }
   .btn:active { transform: translateY(1px); }
   .btn-primary {
-    background: linear-gradient(135deg, var(--primary), #1e40af);
+    background: linear-gradient(135deg, var(--primary), var(--primary-2));
     color: #fff;
-    box-shadow: 0 4px 12px rgba(79,70,229,.3);
+    box-shadow: 0 4px 12px rgba(11,42,91,.25);
   }
-  .btn-primary:hover { box-shadow: 0 8px 20px rgba(79,70,229,.4); transform: translateY(-1px); }
+  .btn-primary:hover { box-shadow: 0 8px 20px rgba(11,42,91,.35); transform: translateY(-1px); }
   .btn-ghost {
-    background: var(--surface-2);
-    color: var(--text);
+    background: var(--surface-2); color: var(--text);
     border: 1.5px solid var(--border);
   }
   .btn-ghost:hover { background: #fff; border-color: #b6c2d4; }
-  .btn-edit {
-    background: var(--info-soft); color: var(--info);
-  }
+  .btn-edit { background: var(--info-soft); color: var(--info); }
   .btn-edit:hover { background: var(--info); color: #fff; }
-  .btn-delete {
-    background: var(--danger-soft); color: var(--danger);
-  }
+  .btn-delete { background: var(--danger-soft); color: var(--danger); }
   .btn-delete:hover { background: var(--danger); color: #fff; }
-  .btn-print { background: var(--primary-soft); color: var(--primary-dark); }
-  .btn-print:hover { background: var(--primary); color: #fff; }
-  .btn-wpp { background: #d1fae5; color: #047857; }
-  .btn-wpp:hover { background: #25d366; color: #fff; }
   .btn-sm { padding: 8px 14px; font-size: .85rem; }
-  .nf-row { margin-bottom: 12px; }
-  .badge-nf { cursor: pointer; border: none; font-family: inherit; transition: transform .15s, box-shadow .15s; }
-  .badge-nf:hover { transform: translateY(-1px); box-shadow: var(--shadow-sm); }
-  .nf-sim { background: var(--success-soft); color: var(--success); }
-  .nf-nao { background: var(--danger-soft); color: var(--danger); }
 
-  /* NOTA FISCAL TOGGLE */
-  .nf-toggle { display: flex; gap: 8px; flex-wrap: wrap; }
-  .nf-opt {
-    flex: 1 1 auto; min-width: 140px;
-    border: 1.5px solid var(--border);
-    background: var(--surface-2);
-    color: var(--muted);
-    font-family: inherit; font-size: .9rem; font-weight: 600;
-    padding: 11px 16px; border-radius: var(--radius-sm);
-    cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-    transition: all .2s ease;
-  }
-  .nf-opt:hover { border-color: var(--primary); color: var(--primary); }
-  .nf-opt.active {
-    background: linear-gradient(135deg, var(--primary), #1e40af);
-    color: #fff; border-color: transparent;
-    box-shadow: 0 4px 12px rgba(11,42,91,.25);
-  }
-
-  /* CARDS */
+  /* CARDS DE PEDIDOS */
   .cards-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
@@ -291,7 +227,7 @@
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
-    padding: 24px;
+    padding: 22px;
     box-shadow: var(--shadow-md);
     transition: all .25s ease;
     display: flex; flex-direction: column;
@@ -300,7 +236,7 @@
   .pedido-card:hover {
     box-shadow: var(--shadow-lg);
     transform: translateY(-3px);
-    border-color: rgba(79,70,229,.25);
+    border-color: rgba(11,42,91,.25);
   }
   .pedido-head {
     display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;
@@ -309,188 +245,137 @@
     margin-bottom: 14px;
   }
   .pedido-cliente {
-    font-size: 1.15rem; font-weight: 700; color: var(--text);
+    font-size: 1.12rem; font-weight: 700;
     display: flex; align-items: center; gap: 8px;
   }
   .pedido-cliente i { color: var(--primary); }
   .pedido-numero {
     background: var(--primary-soft); color: var(--primary-dark);
-    padding: 4px 10px; border-radius: 999px; font-size: .75rem; font-weight: 700;
+    padding: 4px 10px; border-radius: 999px;
+    font-size: .72rem; font-weight: 700;
   }
   .pedido-meta {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px;
     margin-bottom: 14px;
   }
   .meta-item {
     background: var(--surface-2);
-    border-radius: 10px; padding: 10px 12px;
-    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 8px 12px;
   }
-  .meta-item .label { font-size: .7rem; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; font-weight: 600; }
-  .meta-item .value { font-size: .9rem; color: var(--text); font-weight: 600; margin-top: 2px; word-break: break-word; }
-  .pedido-endereco {
-    font-size: .85rem; color: var(--muted);
-    display: flex; align-items: flex-start; gap: 6px;
-    margin-bottom: 14px;
+  .meta-item .lbl {
+    font-size: .68rem; color: var(--muted);
+    text-transform: uppercase; letter-spacing: .05em; font-weight: 600;
+    display: flex; align-items: center; gap: 4px;
   }
-  .pedido-endereco i { color: var(--primary); margin-top: 3px; }
-  .ambientes-list {
+  .meta-item .v { font-size: .92rem; font-weight: 700; margin-top: 2px; }
+  .meta-item .v.valor { color: var(--success); }
+
+  .ambs-list {
     display: flex; flex-direction: column; gap: 10px;
     margin-bottom: 14px;
   }
-  .ambientes-list h4 {
-    font-size: .8rem; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; font-weight: 700;
-    display: flex; align-items: center; gap: 6px;
-    margin-bottom: 4px;
-  }
-  .amb-item {
+  .amb-row {
     background: var(--surface-2);
-    border: 1px solid var(--border);
     border-left: 3px solid var(--primary);
     border-radius: 10px;
     padding: 10px 12px;
   }
-  .amb-item-top {
-    display: flex; justify-content: space-between; align-items: center;
-    flex-wrap: wrap; gap: 6px;
+  .amb-row .amb-nome {
+    font-weight: 700; font-size: .92rem; display: flex; align-items: center; gap: 6px;
   }
-  .amb-name { font-weight: 700; font-size: .9rem; color: var(--text); }
-  .amb-medidas { font-size: .8rem; color: var(--muted); margin-top: 4px; }
-  .amb-tipo {
-    margin-top: 6px; display: flex; gap: 6px; flex-wrap: wrap;
+  .amb-row .amb-medidas {
+    font-size: .82rem; color: var(--muted);
+    margin-top: 2px;
   }
+  .amb-row .amb-tags {
+    display: flex; gap: 6px; flex-wrap: wrap;
+    margin-top: 8px;
+  }
+
   .badge {
-    display: inline-flex; align-items: center; gap: 5px;
-    padding: 3px 10px;
-    border-radius: 999px;
     font-size: .72rem; font-weight: 700;
-    text-transform: uppercase; letter-spacing: .03em;
+    padding: 4px 10px; border-radius: 999px;
+    display: inline-flex; align-items: center; gap: 5px;
   }
-  .badge-tipo { background: var(--primary-soft); color: var(--primary-dark); }
-  .badge-auto { background: var(--success-soft); color: #047857; }
-  .badge-manual { background: var(--warning-soft); color: #92400e; }
-  .obs {
-    background: #fffbeb;
-    border: 1px solid #fde68a;
-    border-radius: 10px;
+  .badge-tipo { background: var(--info-soft); color: var(--info); }
+  .badge-auto { background: #ede9fe; color: #6d28d9; }
+  .badge-manual { background: var(--warning-soft); color: var(--warning); }
+
+  .pedido-obs {
+    background: var(--warning-soft);
+    color: #78350f;
     padding: 10px 12px;
-    font-size: .85rem; color: #78350f;
+    border-radius: 10px;
+    font-size: .85rem;
     margin-bottom: 14px;
-    display: flex; gap: 8px;
+    border-left: 3px solid var(--warning);
   }
-  .obs i { color: #d97706; margin-top: 2px; }
   .pedido-actions {
     display: flex; gap: 8px; margin-top: auto;
-    padding-top: 14px; border-top: 1px solid var(--border);
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
   }
   .pedido-actions .btn { flex: 1; justify-content: center; }
 
-  /* EMPTY */
+  /* EMPTY STATE */
   .empty {
-    text-align: center; padding: 60px 20px;
+    text-align: center; padding: 50px 20px;
     color: var(--muted);
   }
-  .empty i { font-size: 3.5rem; color: var(--primary); opacity: .3; margin-bottom: 16px; }
-  .empty h3 { color: var(--text); font-size: 1.1rem; margin-bottom: 6px; }
+  .empty i { font-size: 3rem; opacity: .35; margin-bottom: 12px; }
+  .empty p { font-size: .95rem; }
 
   /* TOAST */
   .toast {
     position: fixed; bottom: 24px; right: 24px;
-    background: var(--text); color: #fff;
-    padding: 14px 20px; border-radius: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--primary);
     box-shadow: var(--shadow-lg);
+    padding: 14px 18px;
+    border-radius: var(--radius);
     display: flex; align-items: center; gap: 10px;
-    z-index: 999;
-    animation: toastIn .3s ease;
+    font-weight: 600; font-size: .9rem;
+    transform: translateX(120%); transition: transform .3s ease;
+    z-index: 9999; max-width: 360px;
   }
-  .toast.success { background: linear-gradient(135deg, #059669, #10b981); }
-  .toast.danger { background: linear-gradient(135deg, #dc2626, #ef4444); }
-  @keyframes toastIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: none; }
-  }
+  .toast.show { transform: translateX(0); }
+  .toast.success { border-left-color: var(--success); }
+  .toast.success i { color: var(--success); }
+  .toast.error { border-left-color: var(--danger); }
+  .toast.error i { color: var(--danger); }
 
-  /* Modal de confirmação */
-  .modal-overlay {
-    position: fixed; inset: 0;
-    background: rgba(6, 26, 61, 0.55);
-    backdrop-filter: blur(4px);
-    display: none;
-    align-items: center; justify-content: center;
-    z-index: 1000;
-    animation: fadeIn .2s ease;
-  }
-  .modal-overlay.active { display: flex; }
-  .modal-box {
-    background: #fff;
-    border-radius: 18px;
-    padding: 28px;
-    max-width: 440px; width: calc(100% - 32px);
-    box-shadow: 0 20px 60px rgba(11, 42, 91, 0.35);
-    border: 1px solid #e3ebf7;
-    animation: modalIn .25s cubic-bezier(.4,0,.2,1);
-  }
-  .modal-icon {
-    width: 56px; height: 56px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.5rem; color: #fff;
-    margin-bottom: 16px;
-    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-  }
-  .modal-icon.danger { background: linear-gradient(135deg, #b91c1c, #ef4444); }
-  .modal-title {
-    font-size: 1.2rem; font-weight: 800;
-    color: var(--text); margin-bottom: 8px;
-  }
-  .modal-msg { color: #475569; line-height: 1.5; margin-bottom: 22px; }
-  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
-  .modal-actions button {
-    padding: 10px 18px; border-radius: 10px;
-    font-weight: 700; font-size: .95rem; cursor: pointer;
-    border: none; transition: transform .15s, box-shadow .15s;
-  }
-  .modal-actions button:hover { transform: translateY(-1px); }
-  .modal-btn-cancel {
-    background: #f5f8fc; color: var(--text);
-    border: 1px solid #b6c2d4 !important;
-  }
-  .modal-btn-confirm {
-    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-    color: #fff; box-shadow: var(--shadow-md);
-  }
-  .modal-btn-confirm.danger { background: linear-gradient(135deg, #b91c1c, #ef4444); }
-  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-  @keyframes modalIn {
-    from { opacity: 0; transform: scale(.92) translateY(10px); }
-    to { opacity: 1; transform: none; }
-  }
-
-  @media (max-width: 640px) {
+  @media (max-width: 600px) {
     .container { padding: 14px; }
-    .section { padding: 20px; }
+    .section { padding: 18px; }
     header.app-header { padding: 22px 18px; }
-    header.app-header h1 { font-size: 1.3rem; }
-    .pedido-meta { grid-template-columns: 1fr; }
-    .cards-grid { grid-template-columns: 1fr; }
+    .brand h1 { font-size: 1.25rem; }
   }
 </style>
 </head>
 <body>
-<div class="container">
 
+<div class="container">
   <header class="app-header">
     <div class="brand">
-      <div class="logo"><i class="fa-solid fa-shop"></i></div>
+      <div class="logo"><i class="fa-solid fa-store"></i></div>
       <div>
         <h1>Gerenciador Cortinas</h1>
-        <p>Sistema profissional de pedidos de cortinas e persianas</p>
+        <p>Sistema profissional de pedidos</p>
       </div>
     </div>
     <div class="stats">
-      <div class="stat-pill"><i class="fa-solid fa-clipboard-list"></i> <span id="stat-total">0</span> Pedidos</div>
-      <div class="stat-pill"><i class="fa-solid fa-layer-group"></i> <span id="stat-amb">0</span> Ambientes</div>
-      <div class="stat-pill stacked clickable" id="stat-mes-pill" title="Clique para escolher o mês"><span class="mes" id="stat-mes">— <i class="fa-solid fa-chevron-down" style="font-size:.6rem;"></i></span><span class="val"><i class="fa-solid fa-dollar-sign"></i> <span id="stat-valor-mes">R$ 0,00</span></span><div class="mes-dropdown" id="mes-dropdown"></div></div>
-      <div class="stat-pill stacked" title="Total geral acumulado"><span class="mes">Total geral</span><span class="val"><i class="fa-solid fa-sack-dollar"></i> <span id="stat-valor-total">R$ 0,00</span></span></div>
+      <div class="stat-pill">
+        <span class="lbl"><i class="fa-solid fa-clipboard-list"></i> Pedidos</span>
+        <span class="val" id="stat-pedidos">0</span>
+      </div>
+      <div class="stat-pill">
+        <span class="lbl"><i class="fa-solid fa-coins"></i> Total</span>
+        <span class="val" id="stat-total">R$ 0,00</span>
+      </div>
     </div>
   </header>
 
@@ -503,11 +388,11 @@
       <input type="hidden" id="pedido-id" />
       <div class="form-grid">
         <div class="field">
-          <label><i class="fa-solid fa-user"></i> Nome do Cliente</label>
+          <label><i class="fa-solid fa-user"></i> Nome do cliente</label>
           <input type="text" id="cliente" required placeholder="Ex: Maria Silva" />
         </div>
         <div class="field">
-          <label><i class="fa-solid fa-hashtag"></i> Número do Pedido <span class="opt">(opcional)</span></label>
+          <label><i class="fa-solid fa-hashtag"></i> Número do pedido <span class="opt">(opcional)</span></label>
           <input type="text" id="numeroPedido" placeholder="Ex: #1042" />
         </div>
         <div class="field">
@@ -518,24 +403,12 @@
           <label><i class="fa-solid fa-dollar-sign"></i> Valor <span class="opt">(opcional)</span></label>
           <input type="number" id="valor" step="0.01" min="0" placeholder="R$ 0,00" />
         </div>
-        <div class="field">
-          <label><i class="fa-brands fa-whatsapp"></i> Telefone / WhatsApp <span class="opt">(opcional)</span></label>
-          <input type="tel" id="telefone" placeholder="(11) 91234-5678" />
-        </div>
-        <div class="field">
-          <label><i class="fa-solid fa-file-invoice"></i> Nota fiscal</label>
-          <div class="nf-toggle">
-            <button type="button" class="nf-opt" data-nf="sim"><i class="fa-solid fa-circle-check"></i> Já emitida</button>
-            <button type="button" class="nf-opt active" data-nf="nao"><i class="fa-solid fa-hourglass-half"></i> Ainda não emitida</button>
-          </div>
-          <input type="hidden" id="notaFiscal" value="nao" />
-        </div>
         <div class="field full">
           <label><i class="fa-solid fa-location-dot"></i> Endereço</label>
           <input type="text" id="endereco" required placeholder="Rua, número, bairro, cidade" />
         </div>
         <div class="field">
-          <label><i class="fa-solid fa-layer-group"></i> Quantidade de Ambientes</label>
+          <label><i class="fa-solid fa-layer-group"></i> Quantidade de ambientes</label>
           <input type="number" id="qtdAmbientes" min="1" max="20" value="1" required />
         </div>
         <div class="field full">
@@ -544,12 +417,21 @@
         </div>
       </div>
 
-      <div class="ambientes-wrap" id="ambientes-container"></div>
+      <div class="ambientes-wrap">
+        <div class="ambientes-title"><i class="fa-solid fa-house"></i> Ambientes</div>
+        <div class="ambientes-grid" id="ambientes-container"></div>
+      </div>
 
       <div class="actions">
-        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> <span id="submit-text">Salvar Pedido</span></button>
-        <button type="button" class="btn btn-ghost" id="btn-cancel" style="display:none"><i class="fa-solid fa-xmark"></i> Cancelar</button>
-        <button type="reset" class="btn btn-ghost"><i class="fa-solid fa-rotate"></i> Limpar</button>
+        <button type="submit" class="btn btn-primary">
+          <i class="fa-solid fa-floppy-disk"></i> <span id="submit-text">Salvar Pedido</span>
+        </button>
+        <button type="button" class="btn btn-ghost" id="btn-cancel" style="display:none">
+          <i class="fa-solid fa-xmark"></i> Cancelar
+        </button>
+        <button type="reset" class="btn btn-ghost">
+          <i class="fa-solid fa-rotate"></i> Limpar
+        </button>
       </div>
     </form>
   </section>
@@ -557,30 +439,29 @@
   <section class="section">
     <h2 class="section-title">
       <i class="fa-solid fa-clipboard-list"></i>
-      Pedidos Cadastrados
+      Pedidos cadastrados
+      <span class="count" id="count-pedidos">0</span>
     </h2>
-    <div id="cards-container"></div>
+    <div id="cards-area"></div>
   </section>
-
 </div>
+
+<div class="toast" id="toast"><i class="fa-solid fa-circle-check"></i><span id="toast-msg"></span></div>
 
 <script>
 class App {
   constructor() {
-    this.pedidos = [];
-    this.editingId = null;
-    this.tiposCortina = ['Trilho Suíço', 'Caixa Box', 'Persiana', 'Ilhós', 'Tubo Deslizante'];
+    this.tipos = ['Trilho Suíço', 'Caixa Box', 'Persiana', 'Ilhós', 'Tubo Deslizante'];
     this.controles = ['Manual', 'Automatizada'];
-    this.STORAGE_KEY = 'gerenciador_cortinas_pedidos';
+    this.pedidos = JSON.parse(localStorage.getItem('cortinas:pedidos') || '[]');
+    this.editingId = null;
   }
 
   init() {
-    this.pedidos = JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '[]');
     document.getElementById('data').valueAsDate = new Date();
-    this.bindEvents();
-    this.bindMesDropdown();
     this.renderAmbientes();
     this.renderCards();
+    this.bindEvents();
   }
 
   bindEvents() {
@@ -596,40 +477,23 @@ class App {
         this.renderAmbientes();
       }, 0);
     });
-    document.getElementById('pedido-form').addEventListener('reset', () => {
-      setTimeout(() => this.setNotaFiscal('nao'), 0);
-    });
-    document.querySelectorAll('.nf-toggle .nf-opt').forEach(b => {
-      b.addEventListener('click', () => this.setNotaFiscal(b.dataset.nf));
-    });
     document.getElementById('btn-cancel').addEventListener('click', () => this.cancelarEdicao());
   }
 
-  setNotaFiscal(val) {
-    document.getElementById('notaFiscal').value = val;
-    document.querySelectorAll('.nf-toggle .nf-opt').forEach(b => {
-      b.classList.toggle('active', b.dataset.nf === val);
-    });
-  }
-
   renderAmbientes(dados = null) {
-    const qtd = parseInt(document.getElementById('qtdAmbientes').value) || 1;
+    const qtd = Math.max(1, Math.min(20, parseInt(document.getElementById('qtdAmbientes').value) || 1));
     const container = document.getElementById('ambientes-container');
     container.innerHTML = '';
     for (let i = 0; i < qtd; i++) {
-      const d = dados && dados[i] ? dados[i] : { nome: '', largura: '', altura: '', tipoCortina: this.tiposCortina[0], controle: 'Manual' };
+      const d = dados && dados[i] ? dados[i] : { nome: '', largura: '', altura: '', tipoCortina: this.tipos[0], controle: 'Manual' };
       const card = document.createElement('div');
       card.className = 'ambiente-card';
       card.innerHTML = `
-        <div class="ambiente-header">
-          <span class="num">${i+1}</span>
-          <i class="fa-solid fa-door-open"></i>
-          <span>Ambiente ${i+1}</span>
-        </div>
+        <div class="ambiente-head"><span class="num">${i + 1}</span> Ambiente ${i + 1}</div>
         <div class="ambiente-grid">
-          <div class="field">
-            <label>Nome do ambiente</label>
-            <input type="text" data-amb="nome" data-i="${i}" value="${this.esc(d.nome)}" placeholder="Ex: Sala" required />
+          <div class="field" style="grid-column:1/-1">
+            <label>Nome</label>
+            <input type="text" data-amb="nome" data-i="${i}" value="${this.esc(d.nome)}" placeholder="Ex: Sala" />
           </div>
           <div class="field">
             <label>Largura (m)</label>
@@ -639,37 +503,38 @@ class App {
             <label>Altura (m)</label>
             <input type="number" step="0.01" min="0" data-amb="altura" data-i="${i}" value="${this.esc(d.altura)}" placeholder="2.20" required />
           </div>
-          <div class="field">
+          <div class="field" style="grid-column:1/-1">
             <label>Tipo de cortina</label>
             <select data-amb="tipoCortina" data-i="${i}">
-              ${this.tiposCortina.map(t => `<option ${t===d.tipoCortina?'selected':''}>${t}</option>`).join('')}
+              ${this.tipos.map(t => `<option ${t === d.tipoCortina ? 'selected' : ''}>${t}</option>`).join('')}
             </select>
           </div>
-          <div class="field">
+          <div class="field" style="grid-column:1/-1">
             <label>Controle</label>
             <select data-amb="controle" data-i="${i}">
-              ${this.controles.map(c => `<option ${c===d.controle?'selected':''}>${c}</option>`).join('')}
+              ${this.controles.map(c => `<option ${c === d.controle ? 'selected' : ''}>${c}</option>`).join('')}
             </select>
           </div>
-        </div>`;
+        </div>
+      `;
       container.appendChild(card);
     }
   }
 
   coletarAmbientes() {
     const qtd = parseInt(document.getElementById('qtdAmbientes').value) || 1;
-    const ambientes = [];
+    const ambs = [];
     for (let i = 0; i < qtd; i++) {
-      const get = k => document.querySelector(`[data-amb="${k}"][data-i="${i}"]`).value;
-      ambientes.push({
-        nome: get('nome'),
+      const get = (k) => document.querySelector(`[data-amb="${k}"][data-i="${i}"]`).value;
+      ambs.push({
+        nome: get('nome') || `Ambiente ${i + 1}`,
         largura: get('largura'),
         altura: get('altura'),
         tipoCortina: get('tipoCortina'),
-        controle: get('controle')
+        controle: get('controle'),
       });
     }
-    return ambientes;
+    return ambs;
   }
 
   salvarPedido() {
@@ -680,16 +545,12 @@ class App {
       numeroPedido: document.getElementById('numeroPedido').value.trim(),
       data: document.getElementById('data').value,
       valor: document.getElementById('valor').value,
-      telefone: document.getElementById('telefone').value.trim(),
-      notaFiscal: document.getElementById('notaFiscal').value,
       observacoes: document.getElementById('observacoes').value.trim(),
-      ambientes: this.coletarAmbientes()
+      ambientes: this.coletarAmbientes(),
     };
 
     if (this.editingId) {
-      const idx = this.pedidos.findIndex(p => p.id === this.editingId);
-      if (idx >= 0) this.pedidos[idx] = pedido;
-      else this.pedidos.unshift(pedido);
+      this.pedidos = this.pedidos.map(p => p.id === this.editingId ? pedido : p);
       this.toast('Pedido atualizado com sucesso!', 'success');
     } else {
       this.pedidos.unshift(pedido);
@@ -697,35 +558,30 @@ class App {
     }
     this.editingId = null;
     this.persist();
-    this.resetForm();
     this.renderCards();
+    document.getElementById('pedido-form').reset();
+    document.getElementById('form-title').textContent = 'Novo Pedido';
+    document.getElementById('submit-text').textContent = 'Salvar Pedido';
+    document.getElementById('btn-cancel').style.display = 'none';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  async editar(id) {
+  editar(id) {
     const p = this.pedidos.find(x => x.id === id);
     if (!p) return;
-    const ok = await this.confirmar({
-      title: 'Editar pedido?',
-      msg: `Deseja editar o pedido de <strong>${p.cliente || 'cliente'}</strong>? Os dados serão carregados no formulário.`,
-      icon: 'fa-pen-to-square',
-      confirmText: 'Sim, editar',
-    });
-    if (!ok) return;
     this.editingId = id;
     document.getElementById('cliente').value = p.cliente || '';
     document.getElementById('endereco').value = p.endereco || '';
     document.getElementById('numeroPedido').value = p.numeroPedido || '';
     document.getElementById('data').value = p.data || '';
     document.getElementById('valor').value = p.valor || '';
-    document.getElementById('telefone').value = p.telefone || '';
-    this.setNotaFiscal(p.notaFiscal || 'nao');
     document.getElementById('observacoes').value = p.observacoes || '';
     document.getElementById('qtdAmbientes').value = p.ambientes.length;
     this.renderAmbientes(p.ambientes);
     document.getElementById('form-title').textContent = 'Editando Pedido';
     document.getElementById('submit-text').textContent = 'Atualizar Pedido';
     document.getElementById('btn-cancel').style.display = 'inline-flex';
-    // remove temporariamente
+    // remove temporariamente até salvar
     this.pedidos = this.pedidos.filter(x => x.id !== id);
     this.persist();
     this.renderCards();
@@ -734,287 +590,109 @@ class App {
 
   cancelarEdicao() {
     this.editingId = null;
-    this.resetForm();
-  }
-
-  resetForm() {
     document.getElementById('pedido-form').reset();
-    document.getElementById('pedido-id').value = '';
-    document.getElementById('data').valueAsDate = new Date();
-    document.getElementById('qtdAmbientes').value = 1;
     document.getElementById('form-title').textContent = 'Novo Pedido';
     document.getElementById('submit-text').textContent = 'Salvar Pedido';
     document.getElementById('btn-cancel').style.display = 'none';
-    this.editingId = null;
-    this.renderAmbientes();
   }
 
-  async excluir(id) {
+  excluir(id) {
     const p = this.pedidos.find(x => x.id === id);
-    const ok = await this.confirmar({
-      title: 'Excluir pedido?',
-      msg: `Tem certeza que deseja excluir o pedido${p ? ` de <strong>${p.cliente || 'cliente'}</strong>` : ''}? Esta ação não pode ser desfeita.`,
-      icon: 'fa-trash',
-      confirmText: 'Sim, excluir',
-      danger: true,
-    });
-    if (!ok) return;
-    this.pedidos = this.pedidos.filter(p => p.id !== id);
+    if (!p) return;
+    if (!confirm(`Excluir o pedido de ${p.cliente}?\nEsta ação não pode ser desfeita.`)) return;
+    this.pedidos = this.pedidos.filter(x => x.id !== id);
     this.persist();
     this.renderCards();
-    this.toast('Pedido excluído.', 'danger');
-  }
-
-  confirmar({ title, msg, icon = 'fa-circle-question', confirmText = 'Confirmar', cancelText = 'Cancelar', danger = false }) {
-    return new Promise(resolve => {
-      const overlay = document.getElementById('confirm-modal');
-      overlay.querySelector('.modal-icon').className = 'modal-icon' + (danger ? ' danger' : '');
-      overlay.querySelector('.modal-icon').innerHTML = `<i class="fa-solid ${icon}"></i>`;
-      overlay.querySelector('.modal-title').textContent = title;
-      overlay.querySelector('.modal-msg').innerHTML = msg;
-      const btnOk = overlay.querySelector('.modal-btn-confirm');
-      const btnCancel = overlay.querySelector('.modal-btn-cancel');
-      btnOk.textContent = confirmText;
-      btnOk.className = 'modal-btn-confirm' + (danger ? ' danger' : '');
-      btnCancel.textContent = cancelText;
-      overlay.classList.add('active');
-      const finish = (val) => {
-        overlay.classList.remove('active');
-        btnOk.onclick = null; btnCancel.onclick = null; overlay.onclick = null;
-        resolve(val);
-      };
-      btnOk.onclick = () => finish(true);
-      btnCancel.onclick = () => finish(false);
-      overlay.onclick = (e) => { if (e.target === overlay) finish(false); };
-    });
-  }
-
-  bindMesDropdown() {
-    const pill = document.getElementById('stat-mes-pill');
-    const dd = document.getElementById('mes-dropdown');
-    pill.addEventListener('click', (e) => {
-      e.stopPropagation();
-      dd.classList.toggle('show');
-    });
-    document.addEventListener('click', (e) => {
-      if (!pill.contains(e.target)) dd.classList.remove('show');
-    });
+    this.toast('Pedido excluído.', 'error');
   }
 
   renderCards() {
-    const container = document.getElementById('cards-container');
-    document.getElementById('stat-total').textContent = this.pedidos.length;
-    document.getElementById('stat-amb').textContent = this.pedidos.reduce((a,p)=>a+p.ambientes.length,0);
-    const now = new Date();
-    const meses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-    // Agrupa pedidos por mês/ano
-    const porMes = {};
-    this.pedidos.forEach(p => {
-      if (!p.data) return;
-      const d = new Date(p.data);
-      if (isNaN(d)) return;
-      const k = `${d.getFullYear()}-${d.getMonth()}`;
-      if (!porMes[k]) porMes[k] = { mes: d.getMonth(), ano: d.getFullYear(), total: 0 };
-      porMes[k].total += Number(p.valor) || 0;
-    });
-    const mesesDisponiveis = Object.values(porMes).sort((a,b) => b.ano - a.ano || b.mes - a.mes);
-    // Mês selecionado (ou atual por padrão)
-    const sel = this.mesSelecionado || { mes: now.getMonth(), ano: now.getFullYear() };
-    const totalMes = (porMes[`${sel.ano}-${sel.mes}`]?.total) || 0;
-    const totalGeral = this.pedidos.reduce((a,p) => a + (Number(p.valor) || 0), 0);
-    document.getElementById('stat-mes').innerHTML = `${meses[sel.mes]} ${sel.ano} <i class="fa-solid fa-chevron-down" style="font-size:.6rem;"></i>`;
-    document.getElementById('stat-valor-mes').textContent = totalMes.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    document.getElementById('stat-valor-total').textContent = totalGeral.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    // Renderiza dropdown
-    const dd = document.getElementById('mes-dropdown');
-    if (!mesesDisponiveis.length) {
-      dd.innerHTML = '<div class="mes-dropdown-empty">Nenhum mês com trabalhos</div>';
-    } else {
-      dd.innerHTML = mesesDisponiveis.map(m => {
-        const ativo = m.mes === sel.mes && m.ano === sel.ano ? 'active' : '';
-        const v = m.total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-        return `<div class="mes-dropdown-item ${ativo}" data-mes="${m.mes}" data-ano="${m.ano}"><span>${meses[m.mes]} ${m.ano}</span><span class="v">${v}</span></div>`;
-      }).join('');
-      dd.querySelectorAll('.mes-dropdown-item').forEach(it => {
-        it.addEventListener('click', (e) => {
-          e.stopPropagation();
-          this.mesSelecionado = { mes: +it.dataset.mes, ano: +it.dataset.ano };
-          dd.classList.remove('show');
-          this.renderCards();
-        });
-      });
-    }
+    const area = document.getElementById('cards-area');
+    document.getElementById('count-pedidos').textContent = this.pedidos.length;
+    document.getElementById('stat-pedidos').textContent = this.pedidos.length;
+    const total = this.pedidos.reduce((s, p) => s + (parseFloat(p.valor) || 0), 0);
+    document.getElementById('stat-total').textContent = this.fmtMoney(total);
+
     if (!this.pedidos.length) {
-      container.innerHTML = `
+      area.innerHTML = `
         <div class="empty">
-          <i class="fa-solid fa-folder-open"></i>
-          <h3>Nenhum pedido cadastrado</h3>
-          <p>Preencha o formulário acima para criar seu primeiro pedido.</p>
+          <i class="fa-solid fa-inbox"></i>
+          <p>Nenhum pedido cadastrado ainda.<br>Preencha o formulário acima para começar.</p>
         </div>`;
       return;
     }
-    container.className = 'cards-grid';
-    container.innerHTML = this.pedidos.map(p => this.cardHTML(p)).join('');
-    container.querySelectorAll('[data-edit]').forEach(b => b.addEventListener('click', () => this.editar(b.dataset.edit)));
-    container.querySelectorAll('[data-del]').forEach(b => b.addEventListener('click', () => this.excluir(b.dataset.del)));
-    container.querySelectorAll('[data-print]').forEach(b => b.addEventListener('click', () => this.imprimir(b.dataset.print)));
-    container.querySelectorAll('[data-wpp]').forEach(b => b.addEventListener('click', () => this.whatsapp(b.dataset.wpp)));
-    container.querySelectorAll('[data-nf]').forEach(b => b.addEventListener('click', () => this.toggleNotaFiscal(b.dataset.nf)));
+
+    area.innerHTML = `<div class="cards-grid">${this.pedidos.map(p => this.cardHTML(p)).join('')}</div>`;
+    area.querySelectorAll('[data-edit]').forEach(b => b.addEventListener('click', () => this.editar(b.dataset.edit)));
+    area.querySelectorAll('[data-del]').forEach(b => b.addEventListener('click', () => this.excluir(b.dataset.del)));
   }
 
   cardHTML(p) {
-    const dataFmt = p.data ? new Date(p.data + 'T00:00:00').toLocaleDateString('pt-BR') : '-';
-    const valorFmt = p.valor ? Number(p.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : null;
-    const nfEmitida = p.notaFiscal === 'sim';
+    const valor = p.valor ? this.fmtMoney(parseFloat(p.valor)) : null;
+    const data = p.data ? new Date(p.data + 'T00:00:00').toLocaleDateString('pt-BR') : '-';
     return `
-      <div class="pedido-card">
+      <article class="pedido-card">
         <div class="pedido-head">
           <div class="pedido-cliente"><i class="fa-solid fa-user"></i> ${this.esc(p.cliente)}</div>
-          ${p.numeroPedido ? `<div class="pedido-numero">#${this.esc(p.numeroPedido)}</div>` : ''}
-        </div>
-        <div class="nf-row">
-          <button class="badge badge-nf ${nfEmitida ? 'nf-sim' : 'nf-nao'}" data-nf="${p.id}" title="Clique para alternar">
-            <i class="fa-solid ${nfEmitida ? 'fa-circle-check' : 'fa-circle-xmark'}"></i>
-            Nota fiscal ${nfEmitida ? 'emitida' : 'não emitida'}
-          </button>
+          ${p.numeroPedido ? `<span class="pedido-numero">#${this.esc(p.numeroPedido)}</span>` : ''}
         </div>
         <div class="pedido-meta">
-          <div class="meta-item"><div class="label"><i class="fa-solid fa-calendar"></i> Data</div><div class="value">${dataFmt}</div></div>
-          ${valorFmt ? `<div class="meta-item"><div class="label"><i class="fa-solid fa-dollar-sign"></i> Valor</div><div class="value">${valorFmt}</div></div>` : ''}
-          ${p.telefone ? `<div class="meta-item"><div class="label"><i class="fa-brands fa-whatsapp"></i> Telefone</div><div class="value">${this.esc(p.telefone)}</div></div>` : ''}
+          <div class="meta-item">
+            <div class="lbl"><i class="fa-solid fa-calendar"></i> Data</div>
+            <div class="v">${data}</div>
+          </div>
+          ${valor ? `<div class="meta-item"><div class="lbl"><i class="fa-solid fa-dollar-sign"></i> Valor</div><div class="v valor">${valor}</div></div>` : ''}
+          <div class="meta-item">
+            <div class="lbl"><i class="fa-solid fa-location-dot"></i> Endereço</div>
+            <div class="v" style="font-size:.82rem;font-weight:600">${this.esc(p.endereco)}</div>
+          </div>
         </div>
-        <div class="pedido-endereco"><i class="fa-solid fa-location-dot"></i> ${this.esc(p.endereco)}</div>
-        <div class="ambientes-list">
-          <h4><i class="fa-solid fa-layer-group"></i> Ambientes (${p.ambientes.length})</h4>
-          ${p.ambientes.map(a => `
-            <div class="amb-item">
-              <div class="amb-item-top">
-                <span class="amb-name"><i class="fa-solid fa-door-open"></i> ${this.esc(a.nome) || 'Ambiente'}</span>
+        <div class="ambs-list">
+          ${p.ambientes.map((a, i) => `
+            <div class="amb-row">
+              <div class="amb-nome"><i class="fa-solid fa-house"></i> ${this.esc(a.nome) || `Ambiente ${i + 1}`}</div>
+              <div class="amb-medidas"><i class="fa-solid fa-ruler-combined"></i> ${this.esc(a.largura)}m × ${this.esc(a.altura)}m</div>
+              <div class="amb-tags">
+                <span class="badge badge-tipo"><i class="fa-solid fa-layer-group"></i> ${this.esc(a.tipoCortina)}</span>
                 <span class="badge ${a.controle === 'Automatizada' ? 'badge-auto' : 'badge-manual'}">
-                  <i class="fa-solid ${a.controle === 'Automatizada' ? 'fa-bolt' : 'fa-hand-pointer'}"></i> ${a.controle}
+                  <i class="fa-solid ${a.controle === 'Automatizada' ? 'fa-bolt' : 'fa-hand-pointer'}"></i> ${this.esc(a.controle)}
                 </span>
-              </div>
-              <div class="amb-medidas"><i class="fa-solid fa-ruler-combined"></i> Largura: <strong>${this.esc(a.largura)}m</strong> &nbsp;×&nbsp; Altura: <strong>${this.esc(a.altura)}m</strong></div>
-              <div class="amb-tipo">
-                <span class="badge badge-tipo"><i class="fa-solid fa-window-maximize"></i> ${this.esc(a.tipoCortina)}</span>
               </div>
             </div>
           `).join('')}
         </div>
-        ${p.observacoes ? `<div class="obs"><i class="fa-solid fa-comment"></i> <div>${this.esc(p.observacoes)}</div></div>` : ''}
+        ${p.observacoes ? `<div class="pedido-obs"><i class="fa-solid fa-circle-info"></i> ${this.esc(p.observacoes)}</div>` : ''}
         <div class="pedido-actions">
           <button class="btn btn-edit btn-sm" data-edit="${p.id}"><i class="fa-solid fa-pen"></i> Editar</button>
-          <button class="btn btn-print btn-sm" data-print="${p.id}"><i class="fa-solid fa-print"></i> PDF</button>
-          <button class="btn btn-wpp btn-sm" data-wpp="${p.id}"><i class="fa-brands fa-whatsapp"></i> WhatsApp</button>
           <button class="btn btn-delete btn-sm" data-del="${p.id}"><i class="fa-solid fa-trash"></i> Excluir</button>
         </div>
-      </div>`;
+      </article>`;
   }
 
-  toggleNotaFiscal(id) {
-    const p = this.pedidos.find(x => x.id === id);
-    if (!p) return;
-    p.notaFiscal = p.notaFiscal === 'sim' ? 'nao' : 'sim';
-    this.persist();
-    this.renderCards();
-    this.toast(p.notaFiscal === 'sim' ? 'Nota fiscal marcada como emitida.' : 'Nota fiscal marcada como não emitida.', 'success');
+  persist() {
+    localStorage.setItem('cortinas:pedidos', JSON.stringify(this.pedidos));
   }
 
-  imprimir(id) {
-    const p = this.pedidos.find(x => x.id === id);
-    if (!p) return;
-    const dataFmt = p.data ? new Date(p.data + 'T00:00:00').toLocaleDateString('pt-BR') : '-';
-    const valorFmt = p.valor ? Number(p.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '-';
-    const nfTxt = p.notaFiscal === 'sim' ? 'Emitida' : 'Não emitida';
-    const ambHtml = p.ambientes.map((a, i) => `
-      <tr><td>${i+1}</td><td>${this.esc(a.nome) || '-'}</td><td>${this.esc(a.largura)}m</td><td>${this.esc(a.altura)}m</td><td>${this.esc(a.tipoCortina)}</td><td>${this.esc(a.controle)}</td></tr>`).join('');
-    const html = `<!doctype html><html><head><meta charset="utf-8"><title>Pedido ${this.esc(p.cliente)}</title>
-<style>
-body{font-family:Arial,sans-serif;color:#0a1628;padding:32px;max-width:780px;margin:0 auto;}
-h1{color:#0b2a5b;border-bottom:3px solid #0b2a5b;padding-bottom:10px;margin-bottom:18px;}
-h2{color:#0b2a5b;margin-top:24px;font-size:1.1rem;}
-.row{display:flex;flex-wrap:wrap;gap:12px;margin:8px 0 16px;}
-.info{background:#f5f8fc;border:1px solid #d6dee9;border-radius:8px;padding:10px 14px;flex:1;min-width:180px;}
-.info b{display:block;font-size:.75rem;color:#4a5878;text-transform:uppercase;margin-bottom:2px;}
-.nf{display:inline-block;padding:6px 14px;border-radius:999px;font-weight:700;font-size:.85rem;}
-.nf-sim{background:#d1fae5;color:#047857;} .nf-nao{background:#fee2e2;color:#b91c1c;}
-table{width:100%;border-collapse:collapse;margin-top:8px;}
-th,td{border:1px solid #d6dee9;padding:8px 10px;text-align:left;font-size:.9rem;}
-th{background:#0b2a5b;color:#fff;}
-.obs{background:#fffbeb;border:1px solid #fde68a;padding:12px;border-radius:8px;margin-top:16px;color:#78350f;}
-@media print{body{padding:14px;}}
-</style></head><body>
-<h1>Pedido — ${this.esc(p.cliente)} ${p.numeroPedido ? `<span style="float:right;font-size:.9rem;">#${this.esc(p.numeroPedido)}</span>` : ''}</h1>
-<div class="row">
-  <div class="info"><b>Data</b>${dataFmt}</div>
-  <div class="info"><b>Valor</b>${valorFmt}</div>
-  ${p.telefone ? `<div class="info"><b>Telefone</b>${this.esc(p.telefone)}</div>` : ''}
-</div>
-<div class="info"><b>Endereço</b>${this.esc(p.endereco)}</div>
-<p style="margin-top:14px;"><span class="nf ${p.notaFiscal === 'sim' ? 'nf-sim' : 'nf-nao'}">Nota fiscal: ${nfTxt}</span></p>
-<h2>Ambientes (${p.ambientes.length})</h2>
-<table><thead><tr><th>#</th><th>Nome</th><th>Largura</th><th>Altura</th><th>Tipo</th><th>Controle</th></tr></thead><tbody>${ambHtml}</tbody></table>
-${p.observacoes ? `<div class="obs"><b>Observações:</b><br>${this.esc(p.observacoes)}</div>` : ''}
-<p style="margin-top:30px;font-size:.8rem;color:#4a5878;text-align:center;">Gerado por Gerenciador Cortinas</p>
-<script>window.onload=function(){setTimeout(function(){window.print();},300);};<\/script>
-</body></html>`;
-    const w = window.open('', '_blank');
-    if (!w) { this.toast('Permita pop-ups para imprimir/salvar PDF.', 'danger'); return; }
-    w.document.write(html); w.document.close();
+  fmtMoney(v) {
+    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v || 0);
   }
-
-  whatsapp(id) {
-    const p = this.pedidos.find(x => x.id === id);
-    if (!p) return;
-    const dataFmt = p.data ? new Date(p.data + 'T00:00:00').toLocaleDateString('pt-BR') : '-';
-    const valorFmt = p.valor ? Number(p.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '-';
-    const nfTxt = p.notaFiscal === 'sim' ? '✅ Emitida' : '❌ Não emitida';
-    const ambs = p.ambientes.map((a,i) => `${i+1}. *${a.nome || 'Ambiente'}*\n   • Largura: ${a.largura}m\n   • Altura: ${a.altura}m\n   • Tipo: ${a.tipoCortina}\n   • Controle: ${a.controle}`).join('\n\n');
-    const txt = `*Pedido — ${p.cliente}*${p.numeroPedido ? ` (#${p.numeroPedido})` : ''}
-📅 Data: ${dataFmt}
-💰 Valor: ${valorFmt}
-📍 Endereço: ${p.endereco}
-🧾 Nota fiscal: ${nfTxt}
-
-*Ambientes (${p.ambientes.length}):*
-${ambs}${p.observacoes ? `\n\n📝 Obs: ${p.observacoes}` : ''}`;
-    const fone = (p.telefone || '').replace(/\D/g, '');
-    const url = fone
-      ? `https://wa.me/${fone.length <= 11 ? '55' + fone : fone}?text=${encodeURIComponent(txt)}`
-      : `https://wa.me/?text=${encodeURIComponent(txt)}`;
-    window.open(url, '_blank');
-  }
-
-  persist() { localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.pedidos)); }
 
   esc(v) {
-    if (v === null || v === undefined) return '';
-    return String(v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    return String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   }
 
-  toast(msg, type = '') {
-    const t = document.createElement('div');
-    t.className = 'toast ' + type;
-    t.innerHTML = `<i class="fa-solid ${type==='success'?'fa-circle-check':type==='danger'?'fa-circle-exclamation':'fa-circle-info'}"></i> ${msg}`;
-    document.body.appendChild(t);
-    setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateY(20px)'; t.style.transition = 'all .3s'; }, 2200);
-    setTimeout(() => t.remove(), 2600);
+  toast(msg, type = 'success') {
+    const t = document.getElementById('toast');
+    t.className = 'toast show ' + type;
+    t.querySelector('i').className = 'fa-solid ' + (type === 'error' ? 'fa-circle-exclamation' : 'fa-circle-check');
+    document.getElementById('toast-msg').textContent = msg;
+    clearTimeout(this._tt);
+    this._tt = setTimeout(() => t.classList.remove('show'), 2800);
   }
 }
 
 const app = new App();
 app.init();
 </script>
-<div class="modal-overlay" id="confirm-modal" role="dialog" aria-modal="true">
-  <div class="modal-box">
-    <div class="modal-icon"><i class="fa-solid fa-circle-question"></i></div>
-    <div class="modal-title">Confirmar</div>
-    <div class="modal-msg"></div>
-    <div class="modal-actions">
-      <button type="button" class="modal-btn-cancel">Cancelar</button>
-      <button type="button" class="modal-btn-confirm">Confirmar</button>
-    </div>
-  </div>
-</div>
 </body>
 </html>
