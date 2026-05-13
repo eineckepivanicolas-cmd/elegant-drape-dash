@@ -262,6 +262,25 @@
   .nf-sim { background: var(--success-soft); color: var(--success); }
   .nf-nao { background: var(--danger-soft); color: var(--danger); }
 
+  /* NOTA FISCAL TOGGLE */
+  .nf-toggle { display: flex; gap: 8px; flex-wrap: wrap; }
+  .nf-opt {
+    flex: 1 1 auto; min-width: 140px;
+    border: 1.5px solid var(--border);
+    background: var(--surface-2);
+    color: var(--muted);
+    font-family: inherit; font-size: .9rem; font-weight: 600;
+    padding: 11px 16px; border-radius: var(--radius-sm);
+    cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    transition: all .2s ease;
+  }
+  .nf-opt:hover { border-color: var(--primary); color: var(--primary); }
+  .nf-opt.active {
+    background: linear-gradient(135deg, var(--primary), #1e40af);
+    color: #fff; border-color: transparent;
+    box-shadow: 0 4px 12px rgba(11,42,91,.25);
+  }
+
   /* CARDS */
   .cards-grid {
     display: grid;
@@ -504,11 +523,12 @@
           <input type="tel" id="telefone" placeholder="(11) 91234-5678" />
         </div>
         <div class="field">
-          <label><i class="fa-solid fa-file-invoice"></i> Nota fiscal emitida?</label>
-          <select id="notaFiscal">
-            <option value="nao">Não emitida</option>
-            <option value="sim">Sim, emitida</option>
-          </select>
+          <label><i class="fa-solid fa-file-invoice"></i> Nota fiscal</label>
+          <div class="nf-toggle">
+            <button type="button" class="nf-opt" data-nf="sim"><i class="fa-solid fa-circle-check"></i> Já emitida</button>
+            <button type="button" class="nf-opt active" data-nf="nao"><i class="fa-solid fa-hourglass-half"></i> Ainda não emitida</button>
+          </div>
+          <input type="hidden" id="notaFiscal" value="nao" />
         </div>
         <div class="field full">
           <label><i class="fa-solid fa-location-dot"></i> Endereço</label>
@@ -576,7 +596,20 @@ class App {
         this.renderAmbientes();
       }, 0);
     });
+    document.getElementById('pedido-form').addEventListener('reset', () => {
+      setTimeout(() => this.setNotaFiscal('nao'), 0);
+    });
+    document.querySelectorAll('.nf-toggle .nf-opt').forEach(b => {
+      b.addEventListener('click', () => this.setNotaFiscal(b.dataset.nf));
+    });
     document.getElementById('btn-cancel').addEventListener('click', () => this.cancelarEdicao());
+  }
+
+  setNotaFiscal(val) {
+    document.getElementById('notaFiscal').value = val;
+    document.querySelectorAll('.nf-toggle .nf-opt').forEach(b => {
+      b.classList.toggle('active', b.dataset.nf === val);
+    });
   }
 
   renderAmbientes(dados = null) {
@@ -685,7 +718,7 @@ class App {
     document.getElementById('data').value = p.data || '';
     document.getElementById('valor').value = p.valor || '';
     document.getElementById('telefone').value = p.telefone || '';
-    document.getElementById('notaFiscal').value = p.notaFiscal || 'nao';
+    this.setNotaFiscal(p.notaFiscal || 'nao');
     document.getElementById('observacoes').value = p.observacoes || '';
     document.getElementById('qtdAmbientes').value = p.ambientes.length;
     this.renderAmbientes(p.ambientes);
